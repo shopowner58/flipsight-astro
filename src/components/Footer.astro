@@ -1,0 +1,44 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-[clamp(80px,10vw,150px)] border-t fs-rule bg-[var(--fs-bg-2)] px-6 pb-7 pt-16 md:px-[clamp(24px,3.2vw,56px)]">
+  <div class="mx-auto grid max-w-[1640px] gap-10 pb-12 md:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
+    <div>
+      <div class="fs-meta mb-4">FLIPSIGHT</div>
+      <p class="max-w-sm text-[13.5px] leading-relaxed text-[var(--fs-ink-2)]">
+        A curated world where music and image meet. Vinyl releases, collectible editions, merch and events in context.
+      </p>
+    </div>
+    <div>
+      <div class="fs-meta mb-4">Index</div>
+      <ul class="grid gap-2 text-[13.5px] text-[var(--fs-ink-2)]">
+        <li><a href="/music">Music</a></li>
+        <li><a href="/art">Art</a></li>
+        <li><a href="/merch">Merch</a></li>
+        <li><a href="/events">Events</a></li>
+        <li><a href="/blog">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fs-meta mb-4">Contact</div>
+      <ul class="grid gap-2 text-[13.5px] text-[var(--fs-ink-2)]">
+        <li>studio@flipsight.be</li>
+        <li>Antwerp / Lisbon</li>
+        <li>Instagram - @flipsight</li>
+      </ul>
+    </div>
+    <div>
+      <div class="fs-meta mb-4">Newsletter</div>
+      <p class="text-[13.5px] text-[var(--fs-ink-2)]">Occasional letters. Releases, editions, events.</p>
+      <form class="mt-4 flex border-b border-[var(--fs-ink)] py-2">
+        <input class="min-w-0 flex-1 bg-transparent text-[13px] outline-none" type="email" placeholder="your@email.com" />
+        <button class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--fs-accent)]" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </div>
+  <div class="mx-auto flex max-w-[1640px] flex-col justify-between gap-3 border-t fs-soft-rule pt-6 font-mono text-[10.5px] uppercase tracking-[0.14em] text-[var(--fs-mute)] md:flex-row">
+    <span>© FLIPSIGHT {year}</span>
+    <span>All works remain the property of their authors.</span>
+  </div>
+</footer>

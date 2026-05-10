@@ -1,0 +1,26 @@
+---
+import Button from "./Button.astro";
+import type { EventItem } from "../data/events";
+
+const event = Astro.props as EventItem;
+const date = new Date(`${event.date}T12:00:00`);
+const day = date.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" }).replace("/", ".");
+const year = date.getFullYear();
+---
+
+<article class="grid gap-7 border-b fs-soft-rule py-8 md:grid-cols-[120px_1.6fr_1fr_auto]">
+  <div>
+    <div class="fs-display text-[44px] leading-none">{day}</div>
+    <div class="fs-meta-muted mt-2">{year}</div>
+  </div>
+  <div>
+    <div class="fs-meta">{event.time} / {event.location.split(" - ").pop()}</div>
+    <h2 class="fs-display mt-2 text-[clamp(28px,3vw,42px)]">{event.title}</h2>
+    <p class="mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--fs-ink-2)]">{event.description}</p>
+  </div>
+  <div class="pt-2 text-[13px] text-[var(--fs-ink-2)]">{event.location}</div>
+  <div class="flex flex-wrap items-start gap-3 pt-1 md:justify-end">
+    <Button href={event.rsvpLink} variant="secondary" target="_blank" rel="noreferrer">RSVP / Tickets</Button>
+    {event.facebookLink && <Button href={event.facebookLink} variant="ghost" target="_blank" rel="noreferrer">Facebook Event</Button>}
+  </div>
+</article>

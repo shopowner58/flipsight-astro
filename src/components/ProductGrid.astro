@@ -1,0 +1,16 @@
+---
+import ProductCard from "./ProductCard.astro";
+import type { Product, ProductCategory } from "../data/products";
+
+interface Props {
+  products: Product[];
+  category?: ProductCategory;
+}
+
+const { products, category } = Astro.props;
+const visibleProducts = category ? products.filter((product) => product.category === category) : products;
+---
+
+<section class="grid gap-x-[clamp(24px,2.4vw,40px)] gap-y-[clamp(44px,5vw,84px)] sm:grid-cols-2 lg:grid-cols-3">
+  {visibleProducts.map((product) => <ProductCard {...product} />)}
+</section>

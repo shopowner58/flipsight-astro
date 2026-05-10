@@ -1,0 +1,32 @@
+---
+type Variant = "primary" | "secondary" | "ghost";
+
+interface Props {
+  href?: string;
+  variant?: Variant;
+  disabled?: boolean;
+  target?: string;
+  rel?: string;
+}
+
+const { href, variant = "primary", disabled = false, target, rel } = Astro.props;
+
+const classes = [
+  "inline-flex items-center justify-center border-[1.5px] px-5 py-3 text-[11px] uppercase tracking-[0.14em] transition-colors duration-200",
+  "font-mono",
+  variant === "primary" && "border-[var(--fs-ink)] bg-[var(--fs-ink)] text-[var(--fs-bg)] hover:border-[var(--fs-accent)] hover:bg-[var(--fs-accent)]",
+  variant === "secondary" && "border-[var(--fs-ink)] text-[var(--fs-ink)] hover:bg-[var(--fs-ink)] hover:text-[var(--fs-bg)]",
+  variant === "ghost" && "border-[var(--fs-line)] text-[var(--fs-ink-2)] hover:border-[var(--fs-ink)] hover:text-[var(--fs-ink)]",
+  disabled && "pointer-events-none opacity-40",
+].filter(Boolean).join(" ");
+---
+
+{href ? (
+  <a class={classes} href={href} target={target} rel={rel}>
+    <slot />
+  </a>
+) : (
+  <button class={classes} disabled={disabled}>
+    <slot />
+  </button>
+)}

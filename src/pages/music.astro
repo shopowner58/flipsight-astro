@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProductGrid from "../components/ProductGrid.astro";
+import { getProductsByCategory } from "../lib/woocommerce";
+
+const musicProducts = await getProductsByCategory("music");
+---
+
+<BaseLayout title="Music - FLIPSIGHT">
+  <div class="fs-page fs-page-stack">
+    <section class="grid items-end gap-8 md:grid-cols-[6fr_5fr]">
+      <div>
+        <div class="fs-meta">01 - Music</div>
+        <h1 class="fs-display mt-4 text-[clamp(48px,6.5vw,104px)]">A record archive.</h1>
+      </div>
+      <div class="grid gap-6">
+        <p class="max-w-md text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+          Releases pressed in small editions. Long-form listening, studio recordings, and occasional live documents. Each record is treated as an object: sleeve, weight, credits, silence between tracks.
+        </p>
+        <div class="flex justify-between border-t fs-soft-rule pt-3">
+          <span class="fs-meta">{musicProducts.length} releases</span>
+          <span class="fs-meta-muted">Newest first</span>
+        </div>
+      </div>
+    </section>
+    <ProductGrid products={musicProducts} category="music" />
+  </div>
+</BaseLayout>

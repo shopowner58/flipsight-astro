@@ -1,0 +1,51 @@
+---
+import Button from "./Button.astro";
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  title = "Music releases and collectible works.",
+  subtitle = "FLIPSIGHT is an independent music and art label publishing vinyl, editions, objects, and events in small, deliberate runs.",
+  ctaLabel = "View selected editions",
+  ctaHref = "/music",
+} = Astro.props;
+---
+
+<section class="-mx-[clamp(24px,3.2vw,56px)] -mt-[clamp(48px,7vw,112px)] grid min-h-[calc(100vh-72px)] grid-rows-2 border-b fs-soft-rule md:grid-cols-2 md:grid-rows-1">
+  <a class="group relative min-h-[48vh] overflow-hidden border-b fs-soft-rule md:border-b-0 md:border-r" href="/music">
+    <div class="fs-vinyl-art absolute inset-0 transition-transform duration-700 group-hover:scale-[1.035]" style="--tone: oklch(0.84 0.02 18)"></div>
+    <div class="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[rgba(17,17,16,0.74)] via-[rgba(17,17,16,0.38)] to-transparent p-[clamp(28px,3.5vw,56px)] pt-32 text-[var(--fs-bg)]">
+      <div class="font-mono text-[11px] uppercase tracking-[0.14em] text-[rgba(250,250,247,0.72)]">01 - Music</div>
+      <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]">Vinyl releases<br />and sound objects.</h2>
+      <div class="mt-5 font-mono text-[11px] uppercase tracking-[0.14em] opacity-70 transition-opacity group-hover:opacity-100">Enter the music room</div>
+    </div>
+  </a>
+
+  <a class="group relative min-h-[48vh] overflow-hidden" href="/art">
+    <div class="fs-vinyl-art absolute inset-0 transition-transform duration-700 group-hover:scale-[1.035]" style="--tone: oklch(0.84 0.025 220)"></div>
+    <div class="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[rgba(17,17,16,0.74)] via-[rgba(17,17,16,0.38)] to-transparent p-[clamp(28px,3.5vw,56px)] pt-32 text-[var(--fs-bg)]">
+      <div class="font-mono text-[11px] uppercase tracking-[0.14em] text-[rgba(250,250,247,0.72)]">02 - Art</div>
+      <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]">Collectible works<br />and limited editions.</h2>
+      <div class="mt-5 font-mono text-[11px] uppercase tracking-[0.14em] opacity-70 transition-opacity group-hover:opacity-100">Enter the gallery</div>
+    </div>
+  </a>
+
+</section>
+
+<section class="grid items-end gap-8 border-b fs-soft-rule pb-10 pt-[clamp(36px,5vw,80px)] md:grid-cols-[7fr_4fr]">
+  <div>
+    <div class="fs-meta">FLIPSIGHT - Music &amp; Art</div>
+    <h1 class="fs-display mt-4 max-w-4xl text-[clamp(42px,6vw,96px)]">{title}</h1>
+  </div>
+  <div class="grid gap-6">
+    <p class="max-w-md text-[17px] leading-relaxed text-[var(--fs-ink-2)]">{subtitle}</p>
+    <div>
+      <Button href={ctaHref} variant="secondary">{ctaLabel}</Button>
+    </div>
+  </div>
+</section>

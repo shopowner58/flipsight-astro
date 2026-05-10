@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProductGrid from "../../components/ProductGrid.astro";
+import Button from "../../components/Button.astro";
+import { getCartUrl, getCheckoutUrl, getProducts, SITE_URL } from "../../lib/woocommerce";
+
+const products = await getProducts();
+---
+
+<BaseLayout title="Shop - FLIPSIGHT" canonicalUrl={`${SITE_URL}/shop`}>
+  <div class="fs-page fs-page-stack">
+    <section class="grid items-end gap-8 md:grid-cols-[6fr_5fr]">
+      <div>
+        <div class="fs-meta">Shop</div>
+        <h1 class="fs-display mt-4 text-[clamp(48px,6.5vw,104px)]">Catalogue objects.</h1>
+      </div>
+      <div class="grid gap-6">
+        <p class="max-w-md text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+          Browse FLIPSIGHT releases, FLIPSART editions, and studio merch. Products add into the existing WooCommerce cart and checkout.
+        </p>
+        <div class="flex flex-wrap gap-3 border-t fs-soft-rule pt-3">
+          <Button href={getCartUrl()} variant="secondary">Cart</Button>
+          <Button href={getCheckoutUrl()} variant="ghost">Checkout</Button>
+        </div>
+      </div>
+    </section>
+
+    <nav class="flex flex-wrap gap-3">
+      <Button href="/shop/music" variant="ghost">Music</Button>
+      <Button href="/shop/art" variant="ghost">Art</Button>
+      <Button href="/shop/merch" variant="ghost">Merch</Button>
+    </nav>
+
+    <ProductGrid products={products} />
+  </div>
+</BaseLayout>

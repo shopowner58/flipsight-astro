@@ -1,0 +1,50 @@
+---
+import { getCartUrl, getCheckoutUrl } from "../lib/woocommerce";
+
+const nav = [
+  { href: "/music", label: "Music" },
+  { href: "/art", label: "Art" },
+  { href: "/merch", label: "Merch" },
+  { href: "/events", label: "Events" },
+  { href: "/blog", label: "Blog" },
+  { href: "/shop", label: "Shop" },
+];
+---
+
+<header class="sticky top-0 z-40 border-b-[1.5px] fs-rule bg-[color-mix(in_oklab,var(--fs-bg)_92%,transparent)] backdrop-blur-md">
+  <div class="grid grid-cols-[1fr_auto] items-center gap-5 px-6 py-4 md:grid-cols-[1fr_auto_1fr] md:px-[clamp(24px,3.2vw,56px)] md:py-5">
+    <nav class="hidden items-center gap-7 md:flex">
+      {nav.slice(0, 3).map((item) => (
+        <a class="font-mono text-[11px] uppercase tracking-[0.14em] hover:text-[var(--fs-accent)]" href={item.href}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <a class="flex flex-col items-center gap-0.5 text-center" href="/" aria-label="FLIPSIGHT home">
+      <span class="fs-display text-[22px] tracking-[0.08em]">FLIPSIGHT</span>
+      <span class="font-mono text-[9.5px] uppercase tracking-[0.24em] text-[var(--fs-mute)]">Music &amp; Art</span>
+    </a>
+
+    <nav class="hidden items-center justify-end gap-7 md:flex">
+      {nav.slice(3).map((item) => (
+        <a class="font-mono text-[11px] uppercase tracking-[0.14em] hover:text-[var(--fs-accent)]" href={item.href}>
+          {item.label}
+        </a>
+      ))}
+      <a class="font-mono text-[11px] uppercase tracking-[0.14em] hover:text-[var(--fs-accent)]" href={getCartUrl()}>Cart</a>
+      <a class="font-mono text-[11px] uppercase tracking-[0.14em] hover:text-[var(--fs-accent)]" href={getCheckoutUrl()}>Checkout</a>
+    </nav>
+
+    <details class="justify-self-end md:hidden">
+      <summary class="cursor-pointer list-none font-mono text-[11px] uppercase tracking-[0.14em]">Menu</summary>
+      <nav class="absolute left-0 right-0 top-full grid gap-4 border-b fs-soft-rule bg-[var(--fs-bg)] px-6 py-6">
+        {nav.map((item) => (
+          <a class="font-mono text-[11px] uppercase tracking-[0.14em]" href={item.href}>{item.label}</a>
+        ))}
+        <a class="font-mono text-[11px] uppercase tracking-[0.14em]" href={getCartUrl()}>Cart</a>
+        <a class="font-mono text-[11px] uppercase tracking-[0.14em]" href={getCheckoutUrl()}>Checkout</a>
+      </nav>
+    </details>
+  </div>
+</header>

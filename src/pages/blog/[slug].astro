@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { posts } from "../../data/posts";
+import type { Post } from "../../data/posts";
+
+export function getStaticPaths() {
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const date = new Date(`${post.date}T12:00:00`).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<BaseLayout title={`${post.title} - FLIPSIGHT`}>
+  <article class="fs-page">
+    <div class="mx-auto max-w-4xl">
+      <a class="fs-meta hover:text-[var(--fs-accent)]" href="/blog">Back to blog</a>
+      <div class="mt-10 border-b fs-rule pb-8">
+        <div class="fs-meta-muted">{date}</div>
+        <h1 class="fs-display mt-4 text-[clamp(48px,6vw,92px)]">{post.title}</h1>
+      </div>
+      <div class="fs-vinyl-art mt-12 aspect-[16/9]" style="--tone: oklch(0.84 0.018 28)"></div>
+      <p class="mt-12 max-w-2xl text-[18px] leading-relaxed text-[var(--fs-ink)]">{post.excerpt}</p>
+      <p class="mt-6 max-w-2xl text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+        This is a mock editorial detail page. In production, this content can be hydrated from WordPress while preserving the same component rhythm and typography.
+      </p>
+    </div>
+  </article>
+</BaseLayout>
