@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+---
+
+<BaseLayout
+  title="About - FLIPSIGHT"
+  description="FLIPSIGHT is an independent music and art label publishing vinyl, FLIPSART editions, merch, events and editorial work."
+>
+  <div class="fs-page fs-page-stack">
+    <section class="grid items-end gap-8 md:grid-cols-[5fr_6fr]">
+      <div>
+        <div class="fs-meta">About</div>
+        <h1 class="fs-display mt-4 text-[clamp(50px,7vw,118px)]">Music,<br />image,<br />object.</h1>
+      </div>
+      <p class="max-w-xl text-[clamp(18px,2.1vw,28px)] leading-tight text-[var(--fs-ink)]">
+        FLIPSIGHT is an independent label for records, editions and visual culture. Each release is treated as a world: sound, image, object and context.
+      </p>
+    </section>
+
+    <section>
+      <SectionTitle eyebrow="Practice" note="Antwerp / online / limited editions" />
+      <div class="grid gap-8 md:grid-cols-3">
+        <p class="text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+          The label publishes music releases, FLIPSART works, merch and gatherings with an editorial eye for detail.
+        </p>
+        <p class="text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+          Vinyl culture is part of the visual language: grooves, catalogue marks, numbered editions and physical traces.
+        </p>
+        <p class="text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+          The Astro site carries the public FLIPSIGHT experience. WooCommerce remains the stripped-down checkout engine.
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
