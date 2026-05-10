@@ -28,3 +28,11 @@ art-featured.jpg
 assets/
 src/*.jsx
 src/styles.css
+
+# Never commit SSH keys
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+fs
+fs.pub
