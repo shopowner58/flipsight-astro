@@ -6,6 +6,10 @@ interface Props {
   subtitle?: string;
   ctaLabel?: string;
   ctaHref?: string;
+  musicImage?: string;
+  musicTitle?: string;
+  artImage?: string;
+  artTitle?: string;
 }
 
 const {
@@ -13,12 +17,29 @@ const {
   subtitle = "FLIPSIGHT is an independent music and art label publishing vinyl, editions, objects, and events in small, deliberate runs.",
   ctaLabel = "View selected editions",
   ctaHref = "/music",
+  musicImage,
+  musicTitle = "Vinyl releases",
+  artImage,
+  artTitle = "Collectible works",
 } = Astro.props;
 ---
 
 <section class="-mx-[clamp(24px,3.2vw,56px)] -mt-[clamp(48px,7vw,112px)] grid min-h-[calc(100vh-72px)] grid-rows-2 border-b fs-soft-rule md:grid-cols-2 md:grid-rows-1">
   <a class="group relative min-h-[48vh] overflow-hidden border-b fs-soft-rule md:border-b-0 md:border-r" href="/music">
-    <div class="fs-vinyl-art absolute inset-0 transition-transform duration-700 group-hover:scale-[1.035]" style="--tone: oklch(0.84 0.02 18)"></div>
+    {
+      musicImage ? (
+        <img
+          class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+          src={musicImage}
+          alt={musicTitle}
+          loading="eager"
+          decoding="async"
+        />
+      ) : (
+        <div class="fs-vinyl-art absolute inset-0 transition-transform duration-700 group-hover:scale-[1.035]" style="--tone: oklch(0.84 0.02 18)" />
+      )
+    }
+    <div class="absolute inset-0 bg-[rgba(17,17,16,0.12)] mix-blend-multiply"></div>
     <div class="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[rgba(17,17,16,0.74)] via-[rgba(17,17,16,0.38)] to-transparent p-[clamp(28px,3.5vw,56px)] pt-32 text-[var(--fs-bg)]">
       <div class="font-mono text-[11px] uppercase tracking-[0.14em] text-[rgba(250,250,247,0.72)]">01 - Music</div>
       <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]">Vinyl releases<br />and sound objects.</h2>
@@ -27,7 +48,20 @@ const {
   </a>
 
   <a class="group relative min-h-[48vh] overflow-hidden" href="/art">
-    <div class="fs-vinyl-art absolute inset-0 transition-transform duration-700 group-hover:scale-[1.035]" style="--tone: oklch(0.84 0.025 220)"></div>
+    {
+      artImage ? (
+        <img
+          class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+          src={artImage}
+          alt={artTitle}
+          loading="eager"
+          decoding="async"
+        />
+      ) : (
+        <div class="fs-vinyl-art absolute inset-0 transition-transform duration-700 group-hover:scale-[1.035]" style="--tone: oklch(0.84 0.025 220)" />
+      )
+    }
+    <div class="absolute inset-0 bg-[rgba(17,17,16,0.1)] mix-blend-multiply"></div>
     <div class="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[rgba(17,17,16,0.74)] via-[rgba(17,17,16,0.38)] to-transparent p-[clamp(28px,3.5vw,56px)] pt-32 text-[var(--fs-bg)]">
       <div class="font-mono text-[11px] uppercase tracking-[0.14em] text-[rgba(250,250,247,0.72)]">02 - Art</div>
       <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]">Collectible works<br />and limited editions.</h2>

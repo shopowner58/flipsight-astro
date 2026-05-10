@@ -26,14 +26,33 @@ const selectedProducts = products.length > 0 ? products.slice(0, 4) : mockProduc
 
 <BaseLayout>
   <div class="fs-page fs-page-stack pt-[clamp(48px,7vw,112px)]">
-    <Hero />
+    <Hero
+      musicImage={featuredRelease.image}
+      musicTitle={featuredRelease.title}
+      artImage={featuredArt.image}
+      artTitle={featuredArt.title}
+    />
 
     <section class="grid items-start gap-[clamp(24px,4vw,72px)] md:grid-cols-[2fr_5fr_4fr]">
       <div class="border-t fs-rule pt-3">
         <div class="fs-meta">Featured release</div>
         <div class="fs-meta-muted mt-2">{featuredRelease.catalog}</div>
       </div>
-      <a href={`/product/${featuredRelease.slug}`} class="fs-vinyl-art aspect-square" style={`--tone: oklch(0.84 ${featuredRelease.chroma} ${featuredRelease.hue})`}></a>
+      <a href={`/product/${featuredRelease.slug}`} class="group relative aspect-square overflow-hidden border fs-soft-rule bg-[var(--fs-bg-2)]">
+        {
+          featuredRelease.image ? (
+            <img
+              class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+              src={featuredRelease.image}
+              alt={featuredRelease.title}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="fs-vinyl-art h-full w-full" style={`--tone: oklch(0.84 ${featuredRelease.chroma} ${featuredRelease.hue})`} />
+          )
+        }
+      </a>
       <div class="grid gap-4 pt-2">
         <div class="font-medium tracking-wide">{featuredRelease.artist}</div>
         <h2 class="fs-display text-[clamp(34px,4vw,56px)]">{featuredRelease.title}</h2>
@@ -65,7 +84,21 @@ const selectedProducts = products.length > 0 ? products.slice(0, 4) : mockProduc
           <span class="font-mono text-sm tracking-wide">{featuredArt.price}</span>
         </div>
       </div>
-      <a href={`/product/${featuredArt.slug}`} class="fs-vinyl-art aspect-[4/5] md:order-2" style={`--tone: oklch(0.84 ${featuredArt.chroma} ${featuredArt.hue})`}></a>
+      <a href={`/product/${featuredArt.slug}`} class="group relative aspect-[4/5] overflow-hidden border fs-soft-rule bg-[var(--fs-bg-2)] md:order-2">
+        {
+          featuredArt.image ? (
+            <img
+              class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+              src={featuredArt.image}
+              alt={featuredArt.title}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="fs-vinyl-art h-full w-full" style={`--tone: oklch(0.84 ${featuredArt.chroma} ${featuredArt.hue})`} />
+          )
+        }
+      </a>
       <div class="border-t fs-rule pt-3 md:order-3">
         <div class="fs-meta">Featured artwork</div>
         <div class="fs-meta-muted mt-2">{featuredArt.catalog}</div>
