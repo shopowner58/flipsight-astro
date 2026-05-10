@@ -17,6 +17,15 @@ export interface Product {
   hue: number;
   chroma: number;
   aspect?: "square" | "portrait";
+  type?: "simple" | "variable";
+  variants?: ProductVariant[];
+}
+
+export interface ProductVariant {
+  id: number;
+  label: string;
+  value: string;
+  attributeName: string;
 }
 
 export const products: Product[] = [

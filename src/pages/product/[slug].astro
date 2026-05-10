@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Button from "../../components/Button.astro";
 import ProductGrid from "../../components/ProductGrid.astro";
 import type { Product } from "../../data/products";
-import { getAddToCartUrl, getCheckoutAddToCartUrl, getProducts, SITE_URL } from "../../lib/woocommerce";
+import { getAddToCartUrl, getCheckoutAddToCartUrl, getProducts, getVariationCheckoutUrl, SITE_URL } from "../../lib/woocommerce";
 
 export async function getStaticPaths() {
   const products = await getProducts();
@@ -22,10 +22,13 @@ const products = await getProducts();
 const related = products.filter((item) => item.category === product.category && item.slug !== product.slug).slice(0, 3);
 const tone = `oklch(0.84 ${product.chroma} ${product.hue})`;
 const buyHref =
-  product.category === "art"
+  product.type === "variable"
+    ? ""
+    : product.category === "art"
     ? getCheckoutAddToCartUrl(product.id)
     : getAddToCartUrl(product.id, `/shop/${product.category}`);
 const canonicalUrl = `${SITE_URL}/product/${product.slug}`;
+const variants = product.variants ?? [];
 ---
 
 <BaseLayout title={`${product.title} - FLIPSIGHT`} canonicalUrl={canonicalUrl}>
@@ -72,18 +75,41 @@ const canonicalUrl = `${SITE_URL}/product/${product.slug}`;
           </div>
         </dl>
 
-        <div class="mt-3 grid items-center gap-4 border-y fs-rule py-5 sm:grid-cols-[auto_1fr_auto]">
-          <div class="fs-display text-[30px]">{product.price}</div>
-          <Button href={buyHref} variant="primary" disabled={product.stockStatus === "Sold out"}>
-            {product.stockStatus === "Sold out" ? "Sold out" : product.category === "art" ? "Reserve / Buy this work" : "Add to cart"}
-          </Button>
-          <Button href="/events" variant="ghost">Events</Button>
-        </div>
+        {variants.length > 0 ? (
+          <div class="mt-3 border-y fs-rule py-5">
+            <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+              <div>
+                <div class="fs-meta-muted">Choose format</div>
+                <div class="fs-display mt-2 text-[30px]">{product.price}</div>
+              </div>
+              <div class="fs-meta">{variants.length} sizes</div>
+            </div>
+            <div class="mt-5 grid gap-3">
+              {variants.map((variant) => (
+                <a
+                  class="grid gap-3 border fs-soft-rule px-4 py-4 transition-colors hover:border-[var(--fs-ink)] hover:bg-[var(--fs-bg-2)] sm:grid-cols-[1fr_auto]"
+                  href={getVariationCheckoutUrl(product.id, variant)}
+                >
+                  <span class="font-medium uppercase tracking-[0.03em]">{variant.label}</span>
+                  <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--fs-accent)]">Buy this edition</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div class="mt-3 grid items-center gap-4 border-y fs-rule py-5 sm:grid-cols-[auto_1fr_auto]">
+            <div class="fs-display text-[30px]">{product.price}</div>
+            <Button href={buyHref} variant="primary" disabled={product.stockStatus === "Sold out"}>
+              {product.stockStatus === "Sold out" ? "Sold out" : product.category === "art" ? "Reserve / Buy this work" : "Add to cart"}
+            </Button>
+            <Button href="/events" variant="ghost">Events</Button>
+          </div>
+        )}
 
         <div class="border-t fs-soft-rule pt-5">
-          <div class="fs-meta">Provenance</div>
+          <div class="fs-meta">{product.category === "art" ? "FLIPSART" : "Checkout"}</div>
           <p class="mt-3 max-w-lg text-[13px] leading-relaxed text-[var(--fs-ink-2)]">
-            Mock product detail page prepared for future WordPress and WooCommerce data. Checkout stays external for v1.
+            Browse the catalogue in Astro. Cart, checkout, payments, stock and order handling continue securely in WooCommerce.
           </p>
         </div>
       </div>
