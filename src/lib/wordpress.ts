@@ -54,7 +54,7 @@ let eventCache: Promise<EventItem[]> | undefined;
 export async function getEvents(): Promise<EventItem[]> {
   eventCache ??= fetch(`${WOOCOMMERCE_URL}/wp-json/wp/v2/flipsight_event?per_page=50`, {
     headers: { Accept: "application/json" },
-    signal: AbortSignal.timeout(5000),
+    signal: AbortSignal.timeout(10000),
   })
     .then((response) => {
       if (!response.ok) {

@@ -7,6 +7,7 @@ const date = new Date(`${event.date}T12:00:00`);
 const day = date.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" }).replace("/", ".");
 const year = date.getFullYear();
 const isPast = event.status === "past";
+const hasRsvpLink = /^https?:\/\//i.test(event.rsvpLink) || event.rsvpLink.startsWith("/");
 ---
 
 <article class:list={["grid gap-7 border-b fs-soft-rule py-8 md:grid-cols-[120px_1.6fr_1fr_auto]", isPast && "opacity-70"]}>
@@ -21,7 +22,7 @@ const isPast = event.status === "past";
   </div>
   <div class="pt-2 text-[13px] text-[var(--fs-ink-2)]">{event.location}</div>
   <div class="flex flex-wrap items-start gap-3 pt-1 md:justify-end">
-    <Button href={event.rsvpLink} variant={isPast ? "ghost" : "secondary"} target="_blank" rel="noreferrer">{isPast ? "Event archive" : "RSVP / Tickets"}</Button>
+    {hasRsvpLink && <Button href={event.rsvpLink} variant={isPast ? "ghost" : "secondary"} target="_blank" rel="noreferrer">{isPast ? "Event archive" : "RSVP / Tickets"}</Button>}
     {event.facebookLink && <Button href={event.facebookLink} variant="ghost" target="_blank" rel="noreferrer">Facebook Event</Button>}
   </div>
 </article>
