@@ -67,6 +67,7 @@ const getCategoryFromWooProduct = (product: WooStoreProduct): ProductCategory =>
 
   if (category) return category as ProductCategory;
   if (slugs.includes("vinyl")) return "music";
+  if (slugs.includes("apparel-accessories") || slugs.includes("apparel") || slugs.includes("clothing")) return "merch";
   return "music";
 };
 
