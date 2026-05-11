@@ -3,15 +3,25 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import ProductGrid from "../components/ProductGrid.astro";
 import EventCard from "../components/EventCard.astro";
-import BlogCard from "../components/BlogCard.astro";
 import SectionTitle from "../components/SectionTitle.astro";
 import Button from "../components/Button.astro";
 import { getProducts } from "../lib/woocommerce";
 import { products as mockProducts } from "../data/products";
-import { events } from "../data/events";
-import { posts } from "../data/posts";
+import { events as mockEvents } from "../data/events";
+import { getEvents } from "../lib/wordpress";
 
 const products = await getProducts();
+const events = await getEvents();
+const displayEvents = events.length > 0 ? events : mockEvents;
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const upcomingEvents = displayEvents
+  .filter((event) => {
+    if (event.status) return event.status === "upcoming";
+    return new Date(`${event.date}T23:59:59`) >= today;
+  })
+  .sort((a, b) => a.date.localeCompare(b.date));
+const homeEvents = (upcomingEvents.length > 0 ? upcomingEvents : displayEvents.sort((a, b) => b.date.localeCompare(a.date))).slice(0, 2);
 const featuredRelease =
   products.find((product) => product.catalog === "FLIPS009") ??
   products.find((product) => product.slug === "in-between-limited-gatefold-vinyl") ??
@@ -25,18 +35,10 @@ const featuredArt =
   products.find((product) => product.category === "art") ??
   mockProducts.find((product) => product.category === "art") ??
   featuredRelease;
-const selectedProducts = products.length > 0 ? products.slice(0, 4) : mockProducts.slice(0, 4);
+const selectedProducts = (products.length > 0 ? products : mockProducts)
+  .filter((product) => [featuredRelease.slug, featuredArt.slug].includes(product.slug) || product.category === "merch")
+  .slice(0, 3);
 const youtubeVideos = [
-  {
-    id: "cQud85lsjs0",
-    title: "ColorJaxx - Never Enough (Original Mix)",
-    eyebrow: "FLIPS009",
-  },
-  {
-    id: "ACA2hViIF8M",
-    title: "ColorJaxx - Playamer & Out The Door (Album Mix)",
-    eyebrow: "In Between",
-  },
   {
     id: "5fumax6zCCY",
     title: "ColorJaxx @ Club Vaag",
@@ -45,7 +47,17 @@ const youtubeVideos = [
   {
     id: "10jJZ-NJFO4",
     title: "Marc Brauner @ Club Vaag",
-    eyebrow: "Room recording",
+    eyebrow: "Club Vaag",
+  },
+  {
+    id: "sX5Q_IZs6yU",
+    title: "HATT.D Liveset | Release Party Warrecords",
+    eyebrow: "Liveset",
+  },
+  {
+    id: "RbA9pYjPrwE",
+    title: "Bobby & Djenko Liveset | Release Party Warrecords",
+    eyebrow: "Liveset",
   },
 ];
 ---
@@ -132,14 +144,17 @@ const youtubeVideos = [
     </section>
 
     <section>
-      <SectionTitle eyebrow="Selected editions" note="A running selection, updated monthly" />
+      <SectionTitle eyebrow="Selected editions" note="Three current objects from the catalogue" />
       <ProductGrid products={selectedProducts} />
     </section>
 
     <section>
-      <SectionTitle eyebrow="Events in context" note={`${events.length} upcoming dates`} />
+      <SectionTitle eyebrow="Upcoming rooms" note={upcomingEvents.length > 0 ? `${upcomingEvents.length} dates ahead` : "Recent rooms from the archive"} />
       <div class="grid">
-        {events.slice(0, 2).map((event) => <EventCard {...event} />)}
+        {homeEvents.map((event) => <EventCard {...event} />)}
+      </div>
+      <div class="mt-6">
+        <Button href="/events" variant="ghost">All events</Button>
       </div>
     </section>
 
@@ -148,11 +163,11 @@ const youtubeVideos = [
         <div>
           <div class="fs-meta">Moving image</div>
           <h2 class="fs-display mt-3 max-w-4xl text-[clamp(36px,5vw,78px)]">
-            Recent clips from the catalogue.
+            Rooms, live sets and label nights.
           </h2>
         </div>
         <p class="max-w-md text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
-          Release previews, room fragments and label nights. Lightweight here, full screen on YouTube.
+          A small rail of filmed moments: Club Vaag sessions, release parties and livesets around the label.
         </p>
       </div>
       <div class="-mx-[clamp(24px,3.2vw,56px)] flex gap-4 overflow-x-auto px-[clamp(24px,3.2vw,56px)] pb-2">
@@ -192,11 +207,5 @@ const youtubeVideos = [
       </div>
     </section>
 
-    <section>
-      <SectionTitle eyebrow="Notes" note="Studio, releases, editions" />
-      <div class="grid gap-8 md:grid-cols-3">
-        {posts.map((post) => <BlogCard {...post} />)}
-      </div>
-    </section>
   </div>
 </BaseLayout>

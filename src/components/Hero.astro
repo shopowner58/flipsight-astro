@@ -24,8 +24,8 @@ const {
 } = Astro.props;
 ---
 
-<section class="-mx-[clamp(24px,3.2vw,56px)] -mt-[clamp(48px,7vw,112px)] grid min-h-[calc(100vh-72px)] grid-rows-2 border-b fs-soft-rule md:grid-cols-2 md:grid-rows-1">
-  <a class="group relative min-h-[48vh] overflow-hidden border-b fs-soft-rule md:border-b-0 md:border-r" href="/music">
+<section class="-mx-[clamp(24px,3.2vw,56px)] -mt-[clamp(48px,7vw,112px)] flex min-h-[calc(100vh-72px)] flex-col border-b fs-soft-rule md:flex-row">
+  <a class="group relative min-h-[48vh] flex-1 overflow-hidden border-b fs-soft-rule transition-[flex-grow] duration-700 ease-[cubic-bezier(.2,.7,.2,1)] hover:flex-[1.22] md:min-h-0 md:border-b-0 md:border-r" href="/music">
     {
       musicImage ? (
         <img
@@ -47,7 +47,7 @@ const {
     </div>
   </a>
 
-  <a class="group relative min-h-[48vh] overflow-hidden" href="/art">
+  <a class="group relative min-h-[48vh] flex-1 overflow-hidden transition-[flex-grow] duration-700 ease-[cubic-bezier(.2,.7,.2,1)] hover:flex-[1.22] md:min-h-0" href="/art">
     {
       artImage ? (
         <img
