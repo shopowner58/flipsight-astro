@@ -1,9 +1,11 @@
 ---
+import NewsletterForm from "./NewsletterForm.astro";
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="mt-[clamp(80px,10vw,150px)] border-t fs-rule bg-[var(--fs-bg-2)] px-6 pb-7 pt-16 md:px-[clamp(24px,3.2vw,56px)]">
-  <div class="mx-auto grid max-w-[1640px] gap-10 pb-12 md:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
+  <div class="mx-auto grid max-w-[1640px] gap-10 pb-12 lg:grid-cols-[1.35fr_0.7fr_0.9fr_1.3fr]">
     <div>
       <a class="mb-5 block w-fit" href="/" aria-label="FLIPSIGHT home">
         <img
@@ -32,23 +34,22 @@ const year = new Date().getFullYear();
     <div>
       <div class="fs-meta mb-4">Contact</div>
       <ul class="grid gap-2 text-[13.5px] text-[var(--fs-ink-2)]">
-        <li>studio@flipsight.be</li>
+        <li><a href="mailto:studio@flipsight.be">studio@flipsight.be</a></li>
         <li>Fruithoflaan 100 bus 504</li>
         <li>2600 Antwerp, Belgium</li>
-        <li>Instagram - @flipsight_</li>
+        <li><a href="https://www.instagram.com/flipsight_/" target="_blank" rel="noreferrer">Instagram - @flipsight_</a></li>
       </ul>
     </div>
     <div>
-      <div class="fs-meta mb-4">Organisation</div>
-      <ul class="grid gap-2 text-[13.5px] text-[var(--fs-ink-2)]">
-        <li>Flipsight VZW</li>
-        <li>BE 1027 581 772</li>
-        <li>Publishing of music recordings</li>
-      </ul>
+      <div class="fs-meta mb-4">Updates</div>
+      <p class="mb-5 max-w-sm text-[13.5px] leading-relaxed text-[var(--fs-ink-2)]">
+        Low-frequency notes on records, editions, rooms and release windows.
+      </p>
+      <NewsletterForm compact />
     </div>
   </div>
   <div class="mx-auto flex max-w-[1640px] flex-col justify-between gap-3 border-t fs-soft-rule pt-6 font-mono text-[10.5px] uppercase tracking-[0.14em] text-[var(--fs-mute)] md:flex-row">
-    <span>© FLIPSIGHT {year}</span>
+    <span>© FLIPSIGHT {year} · Flipsight VZW · BE 1027 581 772</span>
     <span>All works remain the property of their authors.</span>
   </div>
 </footer>

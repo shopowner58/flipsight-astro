@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Button from "../components/Button.astro";
+import NewsletterForm from "../components/NewsletterForm.astro";
 
 const channels = [
   {
@@ -56,12 +57,45 @@ const channels = [
       </div>
       <div class="grid gap-6 lg:pb-3">
         <p class="max-w-xl text-[clamp(19px,2.2vw,30px)] leading-tight text-[var(--fs-ink)]">
-          No form, no ticket system. For releases, artworks, orders, events or collaborations, send a clear note through the studio inbox.
+          For releases, artworks, orders, events or collaborations, send a clear note. It lands with the studio, not in a ticket maze.
         </p>
         <div>
           <Button href="mailto:studio@flipsight.be" variant="secondary">Mail FLIPSIGHT</Button>
         </div>
       </div>
+    </section>
+
+    <section class="grid gap-8 border-y fs-rule py-[clamp(32px,5vw,72px)] lg:grid-cols-[4fr_8fr]">
+      <div>
+        <div class="fs-meta">Studio inbox</div>
+        <h2 class="fs-display mt-3 text-[clamp(36px,4.8vw,74px)]">Write in.</h2>
+      </div>
+      <form class="fs-emailit-form grid gap-5" action="/api/contact" method="post" data-emailit-form>
+        <div class="grid gap-5 md:grid-cols-2">
+          <label class="grid gap-2">
+            <span class="fs-meta-muted">Email</span>
+            <input class="min-h-12 border-b border-[var(--fs-line)] bg-transparent font-mono text-[14px] outline-none placeholder:text-[var(--fs-mute)] focus:border-[var(--fs-accent)]" type="email" name="email" placeholder="email@domain.com" autocomplete="email" required />
+          </label>
+          <label class="grid gap-2">
+            <span class="fs-meta-muted">Subject</span>
+            <input class="min-h-12 border-b border-[var(--fs-line)] bg-transparent font-mono text-[14px] outline-none placeholder:text-[var(--fs-mute)] focus:border-[var(--fs-accent)]" type="text" name="subject" placeholder="Release, order, event..." required />
+          </label>
+        </div>
+        <label class="grid gap-2">
+          <span class="fs-meta-muted">Message</span>
+          <textarea class="min-h-44 border border-[var(--fs-line-soft)] bg-transparent p-4 text-[15px] leading-relaxed outline-none placeholder:text-[var(--fs-mute)] focus:border-[var(--fs-accent)]" name="message" placeholder="Tell us what this is about." required></textarea>
+        </label>
+        <label class="flex items-start gap-3 text-[12px] leading-relaxed text-[var(--fs-mute)]">
+          <input class="mt-1 h-3.5 w-3.5 accent-[var(--fs-ink)]" type="checkbox" name="consent" />
+          <span>I want to receive FLIPSIGHT updates.</span>
+        </label>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <button class="min-h-12 border border-[var(--fs-line)] bg-[var(--fs-ink)] px-6 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--fs-bg)] transition-colors hover:bg-[var(--fs-accent)]" type="submit">
+            Send message
+          </button>
+          <p class="min-h-5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[var(--fs-mute)]" data-emailit-status aria-live="polite"></p>
+        </div>
+      </form>
     </section>
 
     <section class="grid gap-8 border-y fs-rule py-[clamp(32px,5vw,72px)] lg:grid-cols-[4fr_8fr]">
@@ -106,6 +140,19 @@ const channels = [
         <p class="text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
           For order questions, include the order number and the email used at checkout. WooCommerce handles payment and shipping flow; we keep the communication human.
         </p>
+      </div>
+    </section>
+
+    <section class="grid gap-8 border-t fs-soft-rule pt-[clamp(32px,5vw,72px)] lg:grid-cols-[4fr_8fr]">
+      <div>
+        <div class="fs-meta-muted">Newsletter</div>
+        <h2 class="fs-display mt-3 text-[clamp(32px,3.8vw,56px)]">Release notes.</h2>
+      </div>
+      <div>
+        <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
+          Subscribe for records, editions, exhibition moments and rooms around the catalogue. No noise, no automation theatre.
+        </p>
+        <NewsletterForm />
       </div>
     </section>
   </div>
