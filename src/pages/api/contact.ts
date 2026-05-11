@@ -11,12 +11,23 @@ const escapeHtml = (value: string) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 
-export const POST: APIRoute = async ({ request }) => {
+const readBody = async (request: Request) => {
+  const contentType = request.headers.get("content-type") ?? "";
+
+  if (contentType.includes("application/json")) {
+    return (await request.json()) as Record<string, unknown>;
+  }
+
   const formData = await request.formData();
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  const subject = String(formData.get("subject") ?? "FLIPSIGHT contact").trim();
-  const message = String(formData.get("message") ?? "").trim();
-  const consent = formData.get("consent");
+  return Object.fromEntries(formData);
+};
+
+export const POST: APIRoute = async ({ request }) => {
+  const body = await readBody(request);
+  const email = String(body.email ?? "").trim().toLowerCase();
+  const subject = String(body.subject ?? "FLIPSIGHT contact").trim();
+  const message = String(body.message ?? "").trim();
+  const consent = body.consent;
 
   if (!isValidEmail(email)) {
     return Response.json({ ok: false, message: "Use a valid email address." }, { status: 400 });
@@ -40,7 +51,7 @@ export const POST: APIRoute = async ({ request }) => {
       text: `From: ${email}\nSubject: ${subject || "FLIPSIGHT contact"}\n\n${message}`,
     });
 
-    if (consent === "on") {
+    if (consent === "on" || consent === true) {
       await subscribeToAudience(email).catch((error) => console.error(error));
     }
 
