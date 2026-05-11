@@ -13,15 +13,41 @@ import { posts } from "../data/posts";
 
 const products = await getProducts();
 const featuredRelease =
+  products.find((product) => product.catalog === "FLIPS009") ??
+  products.find((product) => product.slug === "in-between-limited-gatefold-vinyl") ??
   products.find((product) => product.category === "music") ??
   mockProducts.find((product) => product.category === "music") ??
   products[0] ??
   mockProducts[0];
 const featuredArt =
+  products.find((product) => product.catalog === "FLIPSART008") ??
+  products.find((product) => product.slug === "the-funk-expedition") ??
   products.find((product) => product.category === "art") ??
   mockProducts.find((product) => product.category === "art") ??
   featuredRelease;
 const selectedProducts = products.length > 0 ? products.slice(0, 4) : mockProducts.slice(0, 4);
+const youtubeVideos = [
+  {
+    id: "cQud85lsjs0",
+    title: "ColorJaxx - Never Enough (Original Mix)",
+    eyebrow: "FLIPS009",
+  },
+  {
+    id: "ACA2hViIF8M",
+    title: "ColorJaxx - Playamer & Out The Door (Album Mix)",
+    eyebrow: "In Between",
+  },
+  {
+    id: "5fumax6zCCY",
+    title: "ColorJaxx @ Club Vaag",
+    eyebrow: "Labelnight",
+  },
+  {
+    id: "10jJZ-NJFO4",
+    title: "Marc Brauner @ Club Vaag",
+    eyebrow: "Room recording",
+  },
+];
 ---
 
 <BaseLayout>
@@ -114,6 +140,55 @@ const selectedProducts = products.length > 0 ? products.slice(0, 4) : mockProduc
       <SectionTitle eyebrow="Events in context" note={`${events.length} upcoming dates`} />
       <div class="grid">
         {events.slice(0, 2).map((event) => <EventCard {...event} />)}
+      </div>
+    </section>
+
+    <section class="grid gap-8 border-y fs-rule py-[clamp(32px,5vw,72px)]">
+      <div class="grid items-end gap-6 md:grid-cols-[7fr_3fr]">
+        <div>
+          <div class="fs-meta">Moving image</div>
+          <h2 class="fs-display mt-3 max-w-4xl text-[clamp(36px,5vw,78px)]">
+            Recent clips from the catalogue.
+          </h2>
+        </div>
+        <p class="max-w-md text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+          Release previews, room fragments and label nights. Lightweight here, full screen on YouTube.
+        </p>
+      </div>
+      <div class="-mx-[clamp(24px,3.2vw,56px)] flex gap-4 overflow-x-auto px-[clamp(24px,3.2vw,56px)] pb-2">
+        {
+          youtubeVideos.map((video) => (
+            <a
+              class="group min-w-[280px] flex-1 border-t fs-soft-rule pt-4 sm:min-w-[360px]"
+              href={`https://www.youtube.com/watch?v=${video.id}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div class="relative aspect-video overflow-hidden border fs-soft-rule bg-[var(--fs-bg-2)]">
+                <img
+                  class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
+                  alt={video.title}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-[rgba(17,17,16,0.08)] transition-colors group-hover:bg-[rgba(17,17,16,0.02)]"></div>
+                <div class="absolute bottom-3 right-3 border border-[rgba(248,248,244,0.72)] bg-[rgba(17,17,16,0.78)] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--fs-bg)]">
+                  Watch
+                </div>
+              </div>
+              <div class="mt-4 fs-meta-muted">{video.eyebrow}</div>
+              <h3 class="mt-2 text-[18px] leading-tight transition-colors group-hover:text-[var(--fs-accent)]">
+                {video.title}
+              </h3>
+            </a>
+          ))
+        }
+      </div>
+      <div>
+        <Button href="https://www.youtube.com/@Flipsight" target="_blank" rel="noreferrer" variant="ghost">
+          Open YouTube
+        </Button>
       </div>
     </section>
 
