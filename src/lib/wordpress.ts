@@ -1,4 +1,4 @@
-import { events as mockEvents, type Event } from "../data/events";
+import { events as mockEvents, type EventItem } from "../data/events";
 import { WOOCOMMERCE_URL } from "./woocommerce";
 
 interface WordPressEvent {
@@ -32,7 +32,7 @@ const stripHtml = (value = "") =>
     .replace(/\s+/g, " ")
     .trim();
 
-const mapWordPressEvent = (event: WordPressEvent): Event => {
+const mapWordPressEvent = (event: WordPressEvent): EventItem => {
   const fields = event.flipsight_event ?? {};
 
   return {
@@ -45,12 +45,13 @@ const mapWordPressEvent = (event: WordPressEvent): Event => {
     description: fields.description || stripHtml(event.excerpt?.rendered || event.content?.rendered),
     rsvpLink: fields.rsvpLink || fields.ticketLink || fields.sourceUrl || "",
     facebookLink: fields.facebookLink ?? "",
+    status: fields.status,
   };
 };
 
-let eventCache: Promise<Event[]> | undefined;
+let eventCache: Promise<EventItem[]> | undefined;
 
-export async function getEvents(): Promise<Event[]> {
+export async function getEvents(): Promise<EventItem[]> {
   eventCache ??= fetch(`${WOOCOMMERCE_URL}/wp-json/wp/v2/flipsight_event?per_page=50`, {
     headers: { Accept: "application/json" },
     signal: AbortSignal.timeout(5000),

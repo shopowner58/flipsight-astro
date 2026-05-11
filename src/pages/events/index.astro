@@ -6,22 +6,64 @@ import { getEvents } from "../../lib/wordpress";
 
 const events = await getEvents();
 const displayEvents = events.length > 0 ? events : mockEvents;
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const isUpcoming = (event: (typeof displayEvents)[number]) => {
+  if (event.status) return event.status === "upcoming";
+  return new Date(`${event.date}T23:59:59`) >= today;
+};
+const upcomingEvents = displayEvents
+  .filter(isUpcoming)
+  .sort((a, b) => a.date.localeCompare(b.date));
+const pastEvents = displayEvents
+  .filter((event) => !isUpcoming(event))
+  .sort((a, b) => b.date.localeCompare(a.date));
 ---
 
 <BaseLayout title="Events - FLIPSIGHT">
-  <div class="fs-page fs-page-stack">
-    <section class="grid gap-8 border-b fs-rule pb-10 md:grid-cols-[2fr_3fr]">
+  <div class="fs-page flex flex-col gap-[clamp(64px,8vw,124px)]">
+    <section class="grid gap-8 border-b fs-rule pb-10 md:grid-cols-[5fr_6fr]">
       <div>
         <div class="fs-meta">04 - Events</div>
-        <h1 class="fs-display mt-4 text-[clamp(54px,8vw,128px)]">Dates,<br />rooms,<br />signals.</h1>
+        <h1 class="fs-display mt-4 text-[clamp(54px,8vw,128px)]">Rooms for<br />the record.</h1>
       </div>
       <p class="max-w-xl self-end text-[18px] leading-relaxed text-[var(--fs-ink-2)]">
-        Listening sessions, release parties, window sessions and rooms around the catalogue. This page is fed by the FLIPSIGHT event archive in WordPress.
+        Nights, lounges and listening corners where the catalogue leaves the sleeve. FLIPSIGHT events move between vinyl pressure, framed images, low ceilings and friends on rotation.
       </p>
     </section>
 
-    <section class="grid">
-      {displayEvents.map((event) => <EventCard {...event} />)}
-    </section>
+    {upcomingEvents.length > 0 && (
+      <section>
+        <div class="mb-2 grid gap-4 border-b fs-rule pb-4 md:grid-cols-[2fr_3fr]">
+          <div>
+            <div class="fs-meta">Upcoming</div>
+            <h2 class="fs-display mt-3 text-[clamp(34px,4vw,64px)]">Next on the floor.</h2>
+          </div>
+          <p class="max-w-lg self-end text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+            Openings, label nights and temporary rooms for sound and image.
+          </p>
+        </div>
+        <div class="grid">
+          {upcomingEvents.map((event) => <EventCard {...event} />)}
+        </div>
+      </section>
+    )}
+
+    {pastEvents.length > 0 && (
+      <section>
+        <div class="mb-2 grid gap-4 border-b fs-soft-rule pb-4 md:grid-cols-[2fr_3fr]">
+          <div>
+            <div class="fs-meta-muted">Past</div>
+            <h2 class="fs-display mt-3 text-[clamp(30px,3.4vw,52px)] text-[var(--fs-ink-2)]">Archive of echoes.</h2>
+          </div>
+          <p class="max-w-lg self-end text-[14px] leading-relaxed text-[var(--fs-mute)]">
+            Previous FLIPSIGHT rooms, release parties and listening traces.
+          </p>
+        </div>
+        <div class="grid">
+          {pastEvents.map((event) => <EventCard {...event} />)}
+        </div>
+      </section>
+    )}
   </div>
 </BaseLayout>

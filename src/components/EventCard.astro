@@ -6,11 +6,12 @@ const event = Astro.props as EventItem;
 const date = new Date(`${event.date}T12:00:00`);
 const day = date.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" }).replace("/", ".");
 const year = date.getFullYear();
+const isPast = event.status === "past";
 ---
 
-<article class="grid gap-7 border-b fs-soft-rule py-8 md:grid-cols-[120px_1.6fr_1fr_auto]">
+<article class:list={["grid gap-7 border-b fs-soft-rule py-8 md:grid-cols-[120px_1.6fr_1fr_auto]", isPast && "opacity-70"]}>
   <div>
-    <div class="fs-display text-[44px] leading-none">{day}</div>
+    <div class:list={["fs-display text-[44px] leading-none", isPast && "text-[var(--fs-mute)]"]}>{day}</div>
     <div class="fs-meta-muted mt-2">{year}</div>
   </div>
   <div>
@@ -20,7 +21,7 @@ const year = date.getFullYear();
   </div>
   <div class="pt-2 text-[13px] text-[var(--fs-ink-2)]">{event.location}</div>
   <div class="flex flex-wrap items-start gap-3 pt-1 md:justify-end">
-    <Button href={event.rsvpLink} variant="secondary" target="_blank" rel="noreferrer">RSVP / Tickets</Button>
+    <Button href={event.rsvpLink} variant={isPast ? "ghost" : "secondary"} target="_blank" rel="noreferrer">{isPast ? "Event archive" : "RSVP / Tickets"}</Button>
     {event.facebookLink && <Button href={event.facebookLink} variant="ghost" target="_blank" rel="noreferrer">Facebook Event</Button>}
   </div>
 </article>

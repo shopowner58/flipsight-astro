@@ -8,6 +8,7 @@ export interface EventItem {
   description: string;
   rsvpLink: string;
   facebookLink?: string;
+  status?: "upcoming" | "past";
 }
 
 export const events: EventItem[] = [
