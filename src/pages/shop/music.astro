@@ -4,6 +4,8 @@ import ProductGrid from "../../components/ProductGrid.astro";
 import { getProductsByCategory, SITE_URL } from "../../lib/woocommerce";
 
 const products = await getProductsByCategory("music");
+const whiteLabels = products.filter((product) => product.catalog.startsWith("FLIPSW"));
+const regularReleases = products.filter((product) => !product.catalog.startsWith("FLIPSW"));
 ---
 
 <BaseLayout title="Shop Music - FLIPSIGHT" canonicalUrl={`${SITE_URL}/shop/music`}>
@@ -17,6 +19,20 @@ const products = await getProductsByCategory("music");
         Add releases to the WooCommerce cart, then return here to keep browsing the catalogue.
       </p>
     </section>
-    <ProductGrid products={products} category="music" />
+    <ProductGrid products={regularReleases} category="music" />
+    {whiteLabels.length > 0 && (
+      <section class="grid gap-8">
+        <div class="grid gap-4 border-t fs-rule pt-6 md:grid-cols-[1fr_auto] md:items-end">
+          <div>
+            <div class="fs-meta-muted">White label series</div>
+            <h2 class="fs-display mt-2 text-[clamp(30px,3.4vw,48px)]">FLIPSW archive.</h2>
+          </div>
+          <p class="max-w-md text-[13px] leading-relaxed text-[var(--fs-ink-2)]">
+            Hand-stamped, small-run records kept apart from the numbered FLIPS releases.
+          </p>
+        </div>
+        <ProductGrid products={whiteLabels} category="music" />
+      </section>
+    )}
   </div>
 </BaseLayout>

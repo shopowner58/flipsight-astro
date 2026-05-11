@@ -4,6 +4,8 @@ import ProductGrid from "../components/ProductGrid.astro";
 import { getProductsByCategory } from "../lib/woocommerce";
 
 const musicProducts = await getProductsByCategory("music");
+const whiteLabels = musicProducts.filter((product) => product.catalog.startsWith("FLIPSW"));
+const regularReleases = musicProducts.filter((product) => !product.catalog.startsWith("FLIPSW"));
 ---
 
 <BaseLayout title="Music - FLIPSIGHT">
@@ -18,11 +20,25 @@ const musicProducts = await getProductsByCategory("music");
           Releases pressed in small editions. Long-form listening, studio recordings, and occasional live documents. Each record is treated as an object: sleeve, weight, credits, silence between tracks.
         </p>
         <div class="flex justify-between border-t fs-soft-rule pt-3">
-          <span class="fs-meta">{musicProducts.length} releases</span>
+          <span class="fs-meta">{regularReleases.length} releases</span>
           <span class="fs-meta-muted">Newest first</span>
         </div>
       </div>
     </section>
-    <ProductGrid products={musicProducts} category="music" />
+    <ProductGrid products={regularReleases} category="music" />
+    {whiteLabels.length > 0 && (
+      <section class="grid gap-8">
+        <div class="grid gap-4 border-t fs-rule pt-6 md:grid-cols-[1fr_auto] md:items-end">
+          <div>
+            <div class="fs-meta-muted">White label series</div>
+            <h2 class="fs-display mt-2 text-[clamp(30px,3.4vw,48px)]">Hand-stamped cuts.</h2>
+          </div>
+          <p class="max-w-md text-[13px] leading-relaxed text-[var(--fs-ink-2)]">
+            Small-run FLIPSW records, placed slightly aside from the main catalogue: direct, functional, and pressed for rooms that move.
+          </p>
+        </div>
+        <ProductGrid products={whiteLabels} category="music" />
+      </section>
+    )}
   </div>
 </BaseLayout>

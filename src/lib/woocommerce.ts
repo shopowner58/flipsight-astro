@@ -56,6 +56,8 @@ const decodeHtml = (value = "") =>
     .replace(/&euro;/g, "€")
     .replace(/&#8211;/g, "-")
     .replace(/&#8212;/g, "-")
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCharCode(parseInt(code, 16)))
     .replace(/\s+/g, " ")
     .trim();
 
@@ -187,7 +189,7 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta): Product
   return {
     id: product.id,
     slug: product.slug,
-    title: product.name,
+    title: decodeHtml(product.name),
     catalog: getCatalog(product, category),
     category,
     price: formatPrice(product),
