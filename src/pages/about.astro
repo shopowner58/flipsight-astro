@@ -1,34 +1,54 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import SectionTitle from "../components/SectionTitle.astro";
 ---
 
 <BaseLayout
   title="About - FLIPSIGHT"
   description="FLIPSIGHT is an Antwerp-based independent record label and art project built around artists, vinyl, custom artwork and small rooms."
 >
-  <div class="fs-page fs-page-stack">
-    <section class="grid items-end gap-8 md:grid-cols-[5fr_6fr]">
+  <div class="fs-page flex flex-col gap-[clamp(64px,8vw,124px)]">
+    <section class="grid gap-10 lg:grid-cols-[7fr_5fr] lg:items-end">
       <div>
-        <div class="fs-meta">About</div>
-        <h1 class="fs-display mt-4 text-[clamp(50px,7vw,118px)]">Artists,<br />records,<br />rooms.</h1>
+        <div class="fs-meta">About / Antwerp / 2023</div>
+        <h1 class="fs-display mt-4 max-w-5xl text-[clamp(54px,8vw,128px)]">
+          Artists,<br />records,<br />rooms.
+        </h1>
       </div>
-      <div class="grid gap-6">
-        <p class="max-w-xl text-[clamp(18px,2.1vw,28px)] leading-tight text-[var(--fs-ink)]">
+      <div class="grid gap-6 lg:pb-3">
+        <p class="max-w-xl text-[clamp(19px,2.2vw,30px)] leading-tight text-[var(--fs-ink)]">
           FLIPSIGHT is a small independent record label and art project from Antwerp. We release electronic music on vinyl, build a visual world around each record, and gather people around the sound when it makes sense.
         </p>
-        <div class="grid gap-3 border-t fs-soft-rule pt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--fs-mute)] sm:grid-cols-3">
-          <span>Antwerp / 2023</span>
-          <span>Vinyl / editions</span>
-          <span>Limited runs / real rooms</span>
+        <div class="grid gap-3 border-y fs-soft-rule py-4 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--fs-mute)] sm:grid-cols-3">
+          <span>Vinyl</span>
+          <span>Custom artwork</span>
+          <span>Small rooms</span>
         </div>
       </div>
     </section>
 
-    <section class="grid gap-10 lg:grid-cols-[4fr_8fr]">
-      <div class="border-t fs-rule pt-5">
+    <section class="grid gap-6 md:grid-cols-4">
+      <div class="border-t fs-rule pt-4">
+        <div class="fs-meta-muted">01</div>
+        <h2 class="fs-display mt-2 text-[clamp(24px,2.6vw,38px)]">Listen</h2>
+      </div>
+      <div class="border-t fs-soft-rule pt-4">
+        <div class="fs-meta-muted">02</div>
+        <h2 class="fs-display mt-2 text-[clamp(24px,2.6vw,38px)]">Shape</h2>
+      </div>
+      <div class="border-t fs-soft-rule pt-4">
+        <div class="fs-meta-muted">03</div>
+        <h2 class="fs-display mt-2 text-[clamp(24px,2.6vw,38px)]">Press</h2>
+      </div>
+      <div class="border-t fs-soft-rule pt-4">
+        <div class="fs-meta-muted">04</div>
+        <h2 class="fs-display mt-2 text-[clamp(24px,2.6vw,38px)]">Gather</h2>
+      </div>
+    </section>
+
+    <section class="grid gap-10 border-y fs-rule py-[clamp(36px,5vw,72px)] lg:grid-cols-[4fr_8fr]">
+      <div>
         <div class="fs-meta">The release</div>
-        <h2 class="fs-display mt-3 text-[clamp(36px,4.8vw,74px)]">Built around the artist.</h2>
+        <h2 class="fs-display mt-3 text-[clamp(38px,5vw,78px)]">Built around the artist.</h2>
       </div>
       <div class="grid gap-8">
         <p class="max-w-3xl text-[clamp(18px,2vw,26px)] leading-tight text-[var(--fs-ink)]">
@@ -36,19 +56,19 @@ import SectionTitle from "../components/SectionTitle.astro";
         </p>
         <div class="grid gap-6 md:grid-cols-3">
           <div class="border-t fs-soft-rule pt-4">
-            <div class="fs-meta-muted">01 / Listening</div>
+            <div class="fs-meta-muted">Listening</div>
             <p class="mt-3 text-[14px] leading-relaxed text-[var(--fs-ink-2)]">
               Selections are made for feeling, function and detail: music that can live at home, in warm-ups, in late rooms and in the hands of people who care.
             </p>
           </div>
           <div class="border-t fs-soft-rule pt-4">
-            <div class="fs-meta-muted">02 / Direction</div>
+            <div class="fs-meta-muted">Direction</div>
             <p class="mt-3 text-[14px] leading-relaxed text-[var(--fs-ink-2)]">
               Artwork is made for the record, not dropped on top of it. The palette, sleeve, marks and images are shaped to belong to the sound.
             </p>
           </div>
           <div class="border-t fs-soft-rule pt-4">
-            <div class="fs-meta-muted">03 / Object</div>
+            <div class="fs-meta-muted">Object</div>
             <p class="mt-3 text-[14px] leading-relaxed text-[var(--fs-ink-2)]">
               Most FLIPS releases are pressed in limited runs of 300 copies: physical objects with weight, traces, catalogue numbers and a reason to be kept.
             </p>
@@ -57,26 +77,34 @@ import SectionTitle from "../components/SectionTitle.astro";
       </div>
     </section>
 
-    <section>
-      <SectionTitle eyebrow="Practice" title="Sound with its own visual life." note="Vinyl / FLIPSART / editions" />
-      <div class="grid gap-6 md:grid-cols-[5fr_7fr]">
+    <section class="grid gap-10 lg:grid-cols-[5fr_7fr] lg:items-start">
+      <div class="border-t fs-rule pt-5">
+        <div class="fs-meta">Practice</div>
+        <h2 class="fs-display mt-3 text-[clamp(36px,4.4vw,68px)]">
+          Sound with its own visual life.
+        </h2>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2">
         <p class="text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
           A FLIPSIGHT record is more than a track on a platform. It is something you can hold, play, look at, file, lend, wear down and keep. That physical side is part of the music, not a nostalgic extra.
         </p>
         <p class="text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
           Around the records, FLIPSIGHT also creates art pieces, prints and FLIPSART editions. Some works grow directly out of a release, others come from the wider visual archive of the label.
         </p>
+        <div class="border-t fs-soft-rule pt-4 md:col-span-2">
+          <div class="fs-meta-muted">Vinyl / FLIPSART / editions</div>
+        </div>
       </div>
     </section>
 
-    <section class="grid gap-8 border-y fs-rule py-8 md:grid-cols-[4fr_6fr]">
+    <section class="grid gap-8 border-y fs-rule py-[clamp(32px,4vw,56px)] md:grid-cols-[4fr_6fr]">
       <div>
         <div class="fs-meta-muted">Community</div>
-        <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]">Into rooms.</h2>
+        <h2 class="fs-display mt-3 text-[clamp(34px,4vw,60px)]">Into rooms.</h2>
       </div>
       <div class="grid gap-5">
         <p class="text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
-          Label nights, FLIPSIGHT Cafés, listening moments and vernissages are our way of bringing the catalogue off the screen. Small rooms, good systems, familiar faces, new people, records on the table.
+          Label nights, FLIPSIGHT Cafes, listening moments and vernissages are our way of bringing the catalogue off the screen. Small rooms, good systems, familiar faces, new people, records on the table.
         </p>
         <p class="text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
           At its core, FLIPSIGHT is simple: good music, strong visuals, real objects and honest collaboration.
@@ -89,10 +117,10 @@ import SectionTitle from "../components/SectionTitle.astro";
       </div>
     </section>
 
-    <section class="grid gap-8 md:grid-cols-[4fr_8fr]">
-      <div>
+    <section class="grid gap-8 lg:grid-cols-[4fr_8fr]">
+      <div class="border-t fs-rule pt-5">
         <div class="fs-meta-muted">Behind the label</div>
-        <h2 class="fs-display mt-3 text-[clamp(30px,3.4vw,48px)]">Ears / eyes.</h2>
+        <h2 class="fs-display mt-3 text-[clamp(32px,3.4vw,52px)]">Ears / eyes.</h2>
       </div>
       <div class="grid gap-5 md:grid-cols-2">
         <div class="border-t fs-soft-rule pt-4">
