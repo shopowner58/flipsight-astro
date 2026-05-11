@@ -212,7 +212,7 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta): Product
 const getStoreApiProducts = async () => {
   const response = await fetch(`${WOOCOMMERCE_URL}/wp-json/wc/store/v1/products?per_page=100`, {
     headers: { Accept: "application/json" },
-    signal: AbortSignal.timeout(5000),
+    signal: AbortSignal.timeout(15000),
   });
 
   if (!response.ok) {
@@ -226,7 +226,7 @@ const getMusicMeta = async () => {
   try {
     const response = await fetch(`${WOOCOMMERCE_URL}/wp-json/flipsight/v1/music-meta`, {
       headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(10000),
     });
 
     if (!response.ok) return new Map<number, MusicMeta>();
