@@ -1,27 +1,27 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import EventCard from "../../components/EventCard.astro";
-import SectionTitle from "../../components/SectionTitle.astro";
-import { events } from "../../data/events";
+import { events as mockEvents } from "../../data/events";
+import { getEvents } from "../../lib/wordpress";
+
+const events = await getEvents();
+const displayEvents = events.length > 0 ? events : mockEvents;
 ---
 
 <BaseLayout title="Events - FLIPSIGHT">
   <div class="fs-page fs-page-stack">
-    <section class="grid items-end gap-8 md:grid-cols-[6fr_5fr]">
+    <section class="grid gap-8 border-b fs-rule pb-10 md:grid-cols-[2fr_3fr]">
       <div>
         <div class="fs-meta">04 - Events</div>
-        <h1 class="fs-display mt-4 text-[clamp(48px,6.5vw,104px)]">Moments<br />in context.</h1>
+        <h1 class="fs-display mt-4 text-[clamp(54px,8vw,128px)]">Dates,<br />rooms,<br />signals.</h1>
       </div>
-      <p class="max-w-md text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
-        Listening sessions, exhibitions, performances. Events live alongside releases and works, where the objects come to ground.
+      <p class="max-w-xl self-end text-[18px] leading-relaxed text-[var(--fs-ink-2)]">
+        Listening sessions, release parties, window sessions and rooms around the catalogue. This page is fed by the FLIPSIGHT event archive in WordPress.
       </p>
     </section>
 
-    <section>
-      <SectionTitle eyebrow="Upcoming" note={`${events.length} dates`} />
-      <div class="grid">
-        {events.map((event) => <EventCard {...event} />)}
-      </div>
+    <section class="grid">
+      {displayEvents.map((event) => <EventCard {...event} />)}
     </section>
   </div>
 </BaseLayout>
