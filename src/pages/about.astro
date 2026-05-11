@@ -5,17 +5,17 @@ import SectionTitle from "../components/SectionTitle.astro";
 
 <BaseLayout
   title="About - FLIPSIGHT"
-  description="FLIPSIGHT is an Antwerp-based independent record label and art project founded in 2023 by C. de Boer and F. Lagrange."
+  description="FLIPSIGHT is an Antwerp-based independent record label and art project built around artists, vinyl, custom artwork and small rooms."
 >
   <div class="fs-page fs-page-stack">
     <section class="grid items-end gap-8 md:grid-cols-[5fr_6fr]">
       <div>
         <div class="fs-meta">About</div>
-        <h1 class="fs-display mt-4 text-[clamp(50px,7vw,118px)]">Records,<br />images,<br />people.</h1>
+        <h1 class="fs-display mt-4 text-[clamp(50px,7vw,118px)]">Artists,<br />records,<br />rooms.</h1>
       </div>
       <div class="grid gap-6">
         <p class="max-w-xl text-[clamp(18px,2.1vw,28px)] leading-tight text-[var(--fs-ink)]">
-          FLIPSIGHT is a small independent record label and art project from Antwerp. It started in 2023 from a shared love for music, records, art and the people around it.
+          FLIPSIGHT is a small independent record label and art project from Antwerp. We release electronic music on vinyl, build a visual world around each record, and gather people around the sound when it makes sense.
         </p>
         <div class="grid gap-3 border-t fs-soft-rule pt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--fs-mute)] sm:grid-cols-3">
           <span>Antwerp / 2023</span>
@@ -25,66 +25,58 @@ import SectionTitle from "../components/SectionTitle.astro";
       </div>
     </section>
 
-    <section>
-      <SectionTitle eyebrow="Founded by" title="Two sides of the same record." note="C. de Boer / F. Lagrange" />
-      <div class="grid gap-6 md:grid-cols-2">
-        <article class="border-t fs-rule pt-5">
-          <div class="fs-meta-muted">The ears</div>
-          <h2 class="fs-display mt-3 text-[clamp(28px,3vw,46px)]">C. de Boer</h2>
-          <p class="mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
-            Also known as Chris Farmer. Chris brings the music side of FLIPSIGHT: the artists, the selections, the listening, the decisions that turn a track into a release.
-          </p>
-        </article>
-        <article class="border-t fs-rule pt-5">
-          <div class="fs-meta-muted">The eyes</div>
-          <h2 class="fs-display mt-3 text-[clamp(28px,3vw,46px)]">F. Lagrange</h2>
-          <p class="mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
-            Frederik shapes the visual world: artwork, art direction, the website and the objects around each record. The image is built to belong to the music, not simply decorate it.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section class="grid gap-10 lg:grid-cols-[5fr_7fr]">
+    <section class="grid gap-10 lg:grid-cols-[4fr_8fr]">
       <div class="border-t fs-rule pt-5">
-        <div class="fs-meta">How we work</div>
-        <h2 class="fs-display mt-3 text-[clamp(36px,4.8vw,74px)]">Slow enough to care.</h2>
+        <div class="fs-meta">The release</div>
+        <h2 class="fs-display mt-3 text-[clamp(36px,4.8vw,74px)]">Built around the artist.</h2>
       </div>
       <div class="grid gap-8">
         <p class="max-w-3xl text-[clamp(18px,2vw,26px)] leading-tight text-[var(--fs-ink)]">
-          Most FLIPS releases are pressed on vinyl in limited runs of 300 copies. Each one is built together with the artist: listening, talking, testing, refining, then making the sound and the visual identity land in the same place.
+          Each release starts with the music and the person behind it. We listen, talk, test versions, refine the direction and only then decide how the record should look, feel and exist in the world.
         </p>
         <div class="grid gap-6 md:grid-cols-3">
           <div class="border-t fs-soft-rule pt-4">
-            <div class="fs-meta-muted">01 / Sound</div>
+            <div class="fs-meta-muted">01 / Listening</div>
             <p class="mt-3 text-[14px] leading-relaxed text-[var(--fs-ink-2)]">
-              Electronic music selected for feeling, function and detail. Records for home listening, warm-ups and rooms that need a groove.
+              Selections are made for feeling, function and detail: music that can live at home, in warm-ups, in late rooms and in the hands of people who care.
             </p>
           </div>
           <div class="border-t fs-soft-rule pt-4">
-            <div class="fs-meta-muted">02 / Object</div>
+            <div class="fs-meta-muted">02 / Direction</div>
             <p class="mt-3 text-[14px] leading-relaxed text-[var(--fs-ink-2)]">
-              A record is more than a platform link. It is something you can hold, play, look at, file, lend, wear down and keep.
+              Artwork is made for the record, not dropped on top of it. The palette, sleeve, marks and images are shaped to belong to the sound.
             </p>
           </div>
           <div class="border-t fs-soft-rule pt-4">
-            <div class="fs-meta-muted">03 / Image</div>
+            <div class="fs-meta-muted">03 / Object</div>
             <p class="mt-3 text-[14px] leading-relaxed text-[var(--fs-ink-2)]">
-              Every release gets its own visual language: artwork, catalogue marks, editions, sleeves and fragments that extend the music.
+              Most FLIPS releases are pressed in limited runs of 300 copies: physical objects with weight, traces, catalogue numbers and a reason to be kept.
             </p>
           </div>
         </div>
       </div>
     </section>
 
+    <section>
+      <SectionTitle eyebrow="Practice" title="Sound with its own visual life." note="Vinyl / FLIPSART / editions" />
+      <div class="grid gap-6 md:grid-cols-[5fr_7fr]">
+        <p class="text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
+          A FLIPSIGHT record is more than a track on a platform. It is something you can hold, play, look at, file, lend, wear down and keep. That physical side is part of the music, not a nostalgic extra.
+        </p>
+        <p class="text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
+          Around the records, FLIPSIGHT also creates art pieces, prints and FLIPSART editions. Some works grow directly out of a release, others come from the wider visual archive of the label.
+        </p>
+      </div>
+    </section>
+
     <section class="grid gap-8 border-y fs-rule py-8 md:grid-cols-[4fr_6fr]">
       <div>
-        <div class="fs-meta-muted">Beyond releases</div>
+        <div class="fs-meta-muted">Community</div>
         <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]">Into rooms.</h2>
       </div>
       <div class="grid gap-5">
         <p class="text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
-          Next to the records, FLIPSIGHT creates FLIPSART pieces, small editions and events. Label nights, FLIPSIGHT Cafés and vernissages are ways to bring the catalogue off the screen and into real rooms.
+          Label nights, FLIPSIGHT Cafés, listening moments and vernissages are our way of bringing the catalogue off the screen. Small rooms, good systems, familiar faces, new people, records on the table.
         </p>
         <p class="text-[16px] leading-relaxed text-[var(--fs-ink-2)]">
           At its core, FLIPSIGHT is simple: good music, strong visuals, real objects and honest collaboration.
@@ -95,6 +87,15 @@ import SectionTitle from "../components/SectionTitle.astro";
           <a class="fs-meta border fs-soft-rule px-4 py-3 transition-colors hover:border-[var(--fs-ink)] hover:bg-[var(--fs-bg-2)]" href="/events">Events</a>
         </div>
       </div>
+    </section>
+
+    <section class="grid gap-6 md:grid-cols-[4fr_8fr]">
+      <div>
+        <div class="fs-meta-muted">A small note</div>
+      </div>
+      <p class="max-w-3xl border-t fs-soft-rule pt-4 text-[13px] leading-relaxed text-[var(--fs-mute)]">
+        FLIPSIGHT was started in Antwerp in 2023 by C. de Boer, also known as Chris Farmer, and F. Lagrange. Chris takes care of the music side; F. handles the visual direction and the web. The label is not really about us, though. It is about the records, the artists and the people who keep showing up around them.
+      </p>
     </section>
   </div>
 </BaseLayout>
