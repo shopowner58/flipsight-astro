@@ -9,9 +9,12 @@ export interface Product {
   category: ProductCategory;
   price: string;
   image: string;
+  gallery?: string[];
   stockStatus: "Available" | "Low stock" | "Sold out";
   editionInfo: string;
   description: string;
+  bandcampAlbumId?: string;
+  bandcampUrl?: string;
   format?: string;
   year: string;
   hue: number;

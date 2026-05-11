@@ -33,6 +33,15 @@ interface WooStoreProduct {
   permalink?: string;
 }
 
+interface MusicMeta {
+  productId: number;
+  slug: string;
+  sku?: string;
+  bandcampAlbumId?: string;
+  bandcampUrl?: string;
+  gallery?: string[];
+}
+
 const categoryTone: Record<ProductCategory, Pick<Product, "hue" | "chroma" | "aspect">> = {
   music: { hue: 18, chroma: 0.02, aspect: "square" },
   art: { hue: 225, chroma: 0.03, aspect: "portrait" },
@@ -164,10 +173,16 @@ const getVariants = (product: WooStoreProduct) => {
   );
 };
 
-const mapWooProduct = (product: WooStoreProduct): Product => {
+const uniqueItems = (items: string[]) =>
+  Array.from(new Set(items.map((item) => item?.trim()).filter((item): item is string => Boolean(item))));
+
+const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta): Product => {
   const category = getCategoryFromWooProduct(product);
   const tone = categoryTone[category];
   const type = product.type === "variable" ? "variable" : "simple";
+  const image = product.images?.[0]?.src ?? product.images?.[0]?.thumbnail ?? "";
+  const wooGallery = product.images?.slice(1).map((item) => item.src || item.thumbnail || "") ?? [];
+  const metaGallery = musicMeta?.gallery ?? [];
 
   return {
     id: product.id,
@@ -176,10 +191,13 @@ const mapWooProduct = (product: WooStoreProduct): Product => {
     catalog: getCatalog(product, category),
     category,
     price: formatPrice(product),
-    image: product.images?.[0]?.src ?? product.images?.[0]?.thumbnail ?? "",
+    image,
+    gallery: uniqueItems([...wooGallery, ...metaGallery].filter((item) => item !== image)).slice(0, 4),
     stockStatus: product.stock_status === "outofstock" || product.is_in_stock === false ? "Sold out" : product.stock_status === "onbackorder" ? "Low stock" : "Available",
     editionInfo: getEditionInfo(product, category),
     description: getDescription(product, category),
+    bandcampAlbumId: musicMeta?.bandcampAlbumId,
+    bandcampUrl: musicMeta?.bandcampUrl,
     format: getFormat(product, category),
     year: getYear(product),
     type,
@@ -201,11 +219,27 @@ const getStoreApiProducts = async () => {
   return (await response.json()) as WooStoreProduct[];
 };
 
+const getMusicMeta = async () => {
+  try {
+    const response = await fetch(`${WOOCOMMERCE_URL}/wp-json/flipsight/v1/music-meta`, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(5000),
+    });
+
+    if (!response.ok) return new Map<number, MusicMeta>();
+
+    const items = (await response.json()) as MusicMeta[];
+    return new Map(items.map((item) => [item.productId, item]));
+  } catch {
+    return new Map<number, MusicMeta>();
+  }
+};
+
 let productCache: Promise<Product[]> | undefined;
 
 export async function getProducts(): Promise<Product[]> {
-  productCache ??= getStoreApiProducts()
-    .then((wooProducts) => wooProducts.map(mapWooProduct))
+  productCache ??= Promise.all([getStoreApiProducts(), getMusicMeta()])
+    .then(([wooProducts, musicMeta]) => wooProducts.map((product) => mapWooProduct(product, musicMeta.get(product.id))))
     .catch(() => mockProducts);
 
   return productCache;
