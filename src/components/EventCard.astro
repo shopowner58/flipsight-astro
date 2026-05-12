@@ -9,14 +9,45 @@ const year = date.getFullYear();
 const isPast = event.status === "past";
 const hasRsvpLink = /^https?:\/\//i.test(event.rsvpLink) || event.rsvpLink.startsWith("/");
 const shortLocation = event.location.split(" - ").pop();
+const hasPoster = Boolean(event.image);
+const dialogId = `event-poster-${event.slug}`;
 ---
 
 <article class:list={["group border-b fs-soft-rule py-7 md:py-8", isPast && "opacity-75"]}>
-  <div class="grid gap-5 md:grid-cols-[132px_1fr] lg:grid-cols-[156px_1fr_auto] lg:items-start">
+  <div class:list={[
+    "grid gap-5 lg:items-start",
+    hasPoster
+      ? "md:grid-cols-[132px_96px_1fr] lg:grid-cols-[156px_104px_1fr_auto]"
+      : "md:grid-cols-[132px_1fr] lg:grid-cols-[156px_1fr_auto]",
+  ]}>
     <div class="flex items-baseline gap-3 md:block">
       <div class:list={["font-mono text-[26px] leading-none tracking-[-0.02em] md:text-[34px]", isPast ? "text-[var(--fs-mute)]" : "text-[var(--fs-ink)]"]}>{day}</div>
       <div class="fs-meta-muted md:mt-2">{year}</div>
     </div>
+
+    {hasPoster && (
+      <div>
+        <button
+          class="group/poster block w-[88px] border fs-soft-rule bg-[var(--fs-bg-2)] p-1 text-left transition-opacity hover:opacity-80 md:w-full"
+          type="button"
+          aria-label={`Open poster for ${event.title}`}
+          onclick={`document.getElementById('${dialogId}')?.showModal()`}
+        >
+          <img
+            class="aspect-[3/4] w-full object-cover"
+            src={event.image}
+            alt={`${event.title} poster`}
+            loading="lazy"
+          />
+        </button>
+        <dialog id={dialogId} class="m-auto max-h-[92vh] w-[min(92vw,680px)] border fs-rule bg-[var(--fs-bg)] p-3 backdrop:bg-[rgba(17,17,16,0.72)]">
+          <form method="dialog" class="grid gap-3">
+            <button class="justify-self-end font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--fs-mute)] hover:text-[var(--fs-ink)]" aria-label="Close poster">Close</button>
+            <img class="max-h-[82vh] w-full object-contain" src={event.image} alt={`${event.title} poster`} />
+          </form>
+        </dialog>
+      </div>
+    )}
 
     <div class="max-w-3xl">
       <div class="fs-meta-muted">{event.time} / {shortLocation}</div>
