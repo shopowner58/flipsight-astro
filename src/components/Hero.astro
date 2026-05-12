@@ -19,7 +19,7 @@ interface Props {
 }
 
 const {
-  title = "Music releases and collectible works.",
+  title = "Pressed to move<br />framed to last",
   subtitle = "FLIPSIGHT is an independent music and art label publishing vinyl, editions, objects, and events in small, deliberate runs.",
   ctaLabel = "View selected editions",
   ctaHref = "/music",
@@ -89,7 +89,7 @@ const {
     <div class="fs-meta-muted mt-2">Music / Art / Objects</div>
   </div>
   <div>
-    <h1 class="fs-display max-w-3xl text-[clamp(34px,4.6vw,68px)]">{title}</h1>
+    <h1 class="fs-display max-w-3xl text-[clamp(34px,4.6vw,68px)]" set:html={title}></h1>
   </div>
   <div class="grid gap-5 md:pt-1">
     <p class="max-w-md text-[15px] leading-relaxed text-[var(--fs-ink-2)]">{subtitle}</p>
