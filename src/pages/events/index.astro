@@ -34,10 +34,10 @@ const pastEvents = displayEvents
 
     {upcomingEvents.length > 0 && (
       <section class="grid gap-8">
-        <div class="grid gap-4 md:grid-cols-[180px_1fr] md:items-end">
+        <div class="grid max-w-4xl gap-5">
           <div>
             <div class="fs-meta">Upcoming</div>
-            <h2 class="fs-display mt-3 text-[clamp(32px,3.8vw,58px)]">Next on the floor.</h2>
+            <h2 class="mt-3 max-w-3xl text-[clamp(34px,5vw,72px)] font-semibold uppercase leading-[0.98] tracking-normal">Next on the floor.</h2>
           </div>
           <p class="max-w-lg text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
             Openings, label nights and temporary rooms for sound and image.
@@ -51,10 +51,10 @@ const pastEvents = displayEvents
 
     {pastEvents.length > 0 && (
       <section class="grid gap-8">
-        <div class="grid gap-4 md:grid-cols-[180px_1fr] md:items-end">
+        <div class="grid max-w-4xl gap-5">
           <div>
             <div class="fs-meta-muted">Past</div>
-            <h2 class="fs-display mt-3 text-[clamp(30px,3.2vw,48px)] text-[var(--fs-ink-2)]">Archive of echoes.</h2>
+            <h2 class="mt-3 max-w-3xl text-[clamp(32px,4.2vw,58px)] font-semibold uppercase leading-[0.98] tracking-normal text-[var(--fs-ink-2)]">Archive of echoes.</h2>
           </div>
           <p class="max-w-lg text-[14px] leading-relaxed text-[var(--fs-mute)]">
             Previous FLIPSIGHT rooms, release parties and listening traces.
