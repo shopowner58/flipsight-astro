@@ -22,6 +22,8 @@ export interface Product {
   aspect?: "square" | "portrait";
   type?: "simple" | "variable";
   variants?: ProductVariant[];
+  editionLabel?: string;
+  availabilityLabel?: string;
 }
 
 export interface ProductVariant {

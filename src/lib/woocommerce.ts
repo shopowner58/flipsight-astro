@@ -44,7 +44,7 @@ interface MusicMeta {
 
 interface ArtEditionMeta {
   productId: number;
-  variationId: number;
+  variationId?: number | null;
   displayPrice?: string;
   editionLabel?: string;
   availabilityLabel?: string;
@@ -217,6 +217,8 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta, artEditi
     year: getYear(product),
     type,
     variants: getVariants(product, artEditionMeta),
+    editionLabel: artEditionMeta?.get(product.id)?.editionLabel,
+    availabilityLabel: artEditionMeta?.get(product.id)?.availabilityLabel,
     ...tone,
   };
 };
@@ -260,7 +262,7 @@ const getArtEditionMeta = async () => {
     if (!response.ok) return new Map<number, ArtEditionMeta>();
 
     const items = (await response.json()) as ArtEditionMeta[];
-    return new Map(items.map((item) => [item.variationId, item]));
+    return new Map(items.map((item) => [item.variationId ?? item.productId, item]));
   } catch {
     return new Map<number, ArtEditionMeta>();
   }
