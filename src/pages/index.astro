@@ -8,10 +8,11 @@ import Button from "../components/Button.astro";
 import { getProducts } from "../lib/woocommerce";
 import { products as mockProducts } from "../data/products";
 import { events as mockEvents } from "../data/events";
-import { getEvents } from "../lib/wordpress";
+import { getEvents, getHomepageOptions } from "../lib/wordpress";
 
 const products = await getProducts();
 const events = await getEvents();
+const homepageOptions = await getHomepageOptions();
 const displayEvents = events.length > 0 ? events : mockEvents;
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -66,10 +67,20 @@ const youtubeVideos = [
 <BaseLayout>
   <div class="fs-page fs-page-stack pt-[clamp(48px,7vw,112px)]">
     <Hero
-      musicImage={heroMusicImage}
+      musicImage={homepageOptions.musicImage || heroMusicImage}
       musicTitle={featuredRelease.title}
-      artImage={featuredArt.image}
+      musicKicker={homepageOptions.musicKicker}
+      musicHeading={homepageOptions.musicHeading}
+      musicCta={homepageOptions.musicCta}
+      artImage={homepageOptions.artImage || featuredArt.image}
       artTitle={featuredArt.title}
+      artKicker={homepageOptions.artKicker}
+      artHeading={homepageOptions.artHeading}
+      artCta={homepageOptions.artCta}
+      title={homepageOptions.title}
+      subtitle={homepageOptions.subtitle}
+      ctaLabel={homepageOptions.ctaLabel}
+      ctaHref={homepageOptions.ctaHref}
     />
 
     <section class="grid items-start gap-[clamp(24px,4vw,72px)] md:grid-cols-[2fr_5fr_4fr]">

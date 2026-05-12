@@ -21,6 +21,21 @@ interface WordPressEvent {
   };
 }
 
+export interface HomepageOptions {
+  musicImage?: string;
+  musicKicker?: string;
+  musicHeading?: string;
+  musicCta?: string;
+  artImage?: string;
+  artKicker?: string;
+  artHeading?: string;
+  artCta?: string;
+  title?: string;
+  subtitle?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
 const stripHtml = (value = "") =>
   value
     .replace(/<[^>]*>/g, " ")
@@ -50,6 +65,7 @@ const mapWordPressEvent = (event: WordPressEvent): EventItem => {
 };
 
 let eventCache: Promise<EventItem[]> | undefined;
+let homepageOptionsCache: Promise<HomepageOptions> | undefined;
 
 export async function getEvents(): Promise<EventItem[]> {
   eventCache ??= fetch(`${WOOCOMMERCE_URL}/wp-json/wp/v2/flipsight_event?per_page=50`, {
@@ -71,4 +87,21 @@ export async function getEvents(): Promise<EventItem[]> {
     .catch(() => mockEvents);
 
   return eventCache;
+}
+
+export async function getHomepageOptions(): Promise<HomepageOptions> {
+  homepageOptionsCache ??= fetch(`${WOOCOMMERCE_URL}/wp-json/flipsight/v1/homepage-options`, {
+    headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(10000),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`WordPress homepage options request failed: ${response.status}`);
+      }
+
+      return response.json() as Promise<HomepageOptions>;
+    })
+    .catch(() => ({}));
+
+  return homepageOptionsCache;
 }

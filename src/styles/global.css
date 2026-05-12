@@ -49,8 +49,9 @@ body::before {
 body::after {
   animation: fs-groove-signal 30s ease-in-out infinite;
   background:
-    conic-gradient(from 0deg at 72% 78%, transparent 0deg, rgba(37, 63, 127, 0.035) 28deg, transparent 64deg, transparent 180deg, rgba(17, 17, 16, 0.02) 215deg, transparent 250deg),
-    repeating-radial-gradient(circle at 72% 78%, transparent 0 46px, rgba(17, 17, 16, 0.028) 47px, transparent 49px);
+    radial-gradient(ellipse at 72% 78%, rgba(17, 17, 16, 0.045) 0 1.2%, transparent 1.5%),
+    conic-gradient(from 315deg at 72% 78%, transparent 0deg, rgba(37, 63, 127, 0.06) 20deg, rgba(17, 17, 16, 0.032) 48deg, transparent 82deg, transparent 180deg, rgba(17, 17, 16, 0.026) 212deg, transparent 250deg),
+    repeating-radial-gradient(circle at 72% 78%, transparent 0 42px, rgba(17, 17, 16, 0.035) 43px, transparent 46px);
   content: "";
   inset: 0;
   opacity: 0;
@@ -93,13 +94,13 @@ body > * {
   }
 
   82% {
-    opacity: 0.42;
-    transform: rotate(1.25deg);
+    opacity: 0.58;
+    transform: rotate(4deg) scale(1.002);
   }
 
   91% {
-    opacity: 0.18;
-    transform: rotate(2deg);
+    opacity: 0.24;
+    transform: rotate(8deg) scale(1.001);
   }
 }
 
@@ -114,13 +115,13 @@ body > * {
 }
 
 .fs-footer-icon {
-  animation: fs-footer-icon-spin 42s linear infinite;
+  animation: fs-footer-icon-spin 28s linear infinite;
   transform-origin: 50% 50%;
   transition: animation-duration 300ms ease, opacity 300ms ease;
 }
 
 .fs-footer-icon:hover {
-  animation-duration: 12s;
+  animation-duration: 8s;
   opacity: 0.82;
 }
 

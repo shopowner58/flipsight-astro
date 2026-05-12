@@ -8,8 +8,14 @@ interface Props {
   ctaHref?: string;
   musicImage?: string;
   musicTitle?: string;
+  musicKicker?: string;
+  musicHeading?: string;
+  musicCta?: string;
   artImage?: string;
   artTitle?: string;
+  artKicker?: string;
+  artHeading?: string;
+  artCta?: string;
 }
 
 const {
@@ -19,8 +25,14 @@ const {
   ctaHref = "/music",
   musicImage,
   musicTitle = "Vinyl releases",
+  musicKicker = "01 - Music",
+  musicHeading = "Vinyl releases<br />and sound objects.",
+  musicCta = "Enter the music room",
   artImage,
   artTitle = "Collectible works",
+  artKicker = "02 - Art",
+  artHeading = "Collectible works<br />and limited editions.",
+  artCta = "Enter the gallery",
 } = Astro.props;
 ---
 
@@ -41,9 +53,9 @@ const {
     }
     <div class="absolute inset-0 bg-[rgba(17,17,16,0.12)] mix-blend-multiply"></div>
     <div class="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[rgba(17,17,16,0.74)] via-[rgba(17,17,16,0.38)] to-transparent p-[clamp(28px,3.5vw,56px)] pt-32 text-[var(--fs-bg)]">
-      <div class="font-mono text-[11px] uppercase tracking-[0.14em] text-[rgba(250,250,247,0.72)]">01 - Music</div>
-      <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]">Vinyl releases<br />and sound objects.</h2>
-      <div class="mt-5 font-mono text-[11px] uppercase tracking-[0.14em] opacity-70 transition-opacity group-hover:opacity-100">Enter the music room</div>
+      <div class="font-mono text-[11px] uppercase tracking-[0.14em] text-[rgba(250,250,247,0.72)]">{musicKicker}</div>
+      <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]" set:html={musicHeading}></h2>
+      <div class="mt-5 font-mono text-[11px] uppercase tracking-[0.14em] opacity-70 transition-opacity group-hover:opacity-100">{musicCta}</div>
     </div>
   </a>
 
@@ -63,9 +75,9 @@ const {
     }
     <div class="absolute inset-0 bg-[rgba(17,17,16,0.1)] mix-blend-multiply"></div>
     <div class="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[rgba(17,17,16,0.74)] via-[rgba(17,17,16,0.38)] to-transparent p-[clamp(28px,3.5vw,56px)] pt-32 text-[var(--fs-bg)]">
-      <div class="font-mono text-[11px] uppercase tracking-[0.14em] text-[rgba(250,250,247,0.72)]">02 - Art</div>
-      <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]">Collectible works<br />and limited editions.</h2>
-      <div class="mt-5 font-mono text-[11px] uppercase tracking-[0.14em] opacity-70 transition-opacity group-hover:opacity-100">Enter the gallery</div>
+      <div class="font-mono text-[11px] uppercase tracking-[0.14em] text-[rgba(250,250,247,0.72)]">{artKicker}</div>
+      <h2 class="fs-display mt-3 text-[clamp(32px,4vw,58px)]" set:html={artHeading}></h2>
+      <div class="mt-5 font-mono text-[11px] uppercase tracking-[0.14em] opacity-70 transition-opacity group-hover:opacity-100">{artCta}</div>
     </div>
   </a>
 
