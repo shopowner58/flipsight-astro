@@ -3,8 +3,8 @@
  * FLIPSIGHT WooCommerce add-to-cart return handler.
  *
  * Add this to a small site plugin or the active WooCommerce checkout theme's
- * functions.php. It lets Astro links append ?return_to=https://flipsight.be/shop
- * after WooCommerce adds the product to the cart, while blocking open redirects.
+ * functions.php. It sends add-to-cart requests to the WooCommerce cart.
+ * Optional return_to URLs are still supported for safe FLIPSIGHT frontend links.
  *
  * The allowed_redirect_hosts filter is required because WooCommerce uses
  * wp_safe_redirect(). Without this, WordPress falls back to wp-admin for
@@ -18,7 +18,7 @@ add_filter('allowed_redirect_hosts', function ($hosts) {
 
 add_filter('woocommerce_add_to_cart_redirect', function ($url) {
     if (empty($_REQUEST['return_to'])) {
-        return $url;
+        return function_exists('wc_get_cart_url') ? wc_get_cart_url() : $url;
     }
 
     $return_to = esc_url_raw(wp_unslash($_REQUEST['return_to']));

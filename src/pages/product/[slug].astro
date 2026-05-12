@@ -122,7 +122,9 @@ const bandcampEmbedSrc = product.bandcampAlbumId
             <Button href={buyHref} variant="primary" disabled={product.stockStatus === "Sold out"}>
               {product.stockStatus === "Sold out" ? "Sold out" : product.category === "art" ? "Reserve / Buy this work" : "Add to cart"}
             </Button>
-            <Button href="/events" variant="ghost">Events</Button>
+            {product.category === "music" && product.bandcampUrl && (
+              <Button href={product.bandcampUrl} variant="ghost" target="_blank" rel="noreferrer">Bandcamp</Button>
+            )}
           </div>
         )}
 
