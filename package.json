@@ -17,6 +17,8 @@
     "typescript": "^5.8.3"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.4"
+    "@astrojs/check": "^0.9.4",
+    "pdfkit": "^0.18.0",
+    "qrcode": "^1.5.4"
   }
 }
