@@ -13,7 +13,7 @@ const buyHref =
     ? `/product/${product.slug}`
     : product.category === "art"
     ? getCheckoutAddToCartUrl(product.id)
-    : getAddToCartUrl(product.id, `/shop/${product.category}`);
+    : getAddToCartUrl(product.id, `/${product.category}`);
 const buyLabel =
   product.type === "variable"
     ? "Choose size"

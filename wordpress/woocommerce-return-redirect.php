@@ -17,17 +17,15 @@ add_filter('allowed_redirect_hosts', function ($hosts) {
 });
 
 add_filter('woocommerce_add_to_cart_redirect', function ($url) {
-    if (empty($_REQUEST['return_to'])) {
-        return function_exists('wc_get_cart_url') ? wc_get_cart_url() : $url;
+    if (!empty($_REQUEST['return_to'])) {
+        $return_to = esc_url_raw(wp_unslash($_REQUEST['return_to']));
+        $allowed_hosts = array('flipsight.be', 'www.flipsight.be');
+        $host = wp_parse_url($return_to, PHP_URL_HOST);
+
+        if (in_array($host, $allowed_hosts, true) && function_exists('WC') && WC()->session) {
+            WC()->session->set('flipsight_continue_shopping_url', $return_to);
+        }
     }
 
-    $return_to = esc_url_raw(wp_unslash($_REQUEST['return_to']));
-    $allowed_hosts = array('flipsight.be', 'www.flipsight.be');
-    $host = wp_parse_url($return_to, PHP_URL_HOST);
-
-    if (in_array($host, $allowed_hosts, true)) {
-        return $return_to;
-    }
-
-    return $url;
+    return function_exists('wc_get_cart_url') ? wc_get_cart_url() : $url;
 });

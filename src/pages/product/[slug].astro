@@ -33,7 +33,7 @@ const buyHref =
     ? ""
     : product.category === "art"
     ? getCheckoutAddToCartUrl(product.id)
-    : getAddToCartUrl(product.id, `/shop/${product.category}`);
+    : getAddToCartUrl(product.id, `/${product.category}`);
 const canonicalUrl = `${SITE_URL}/product/${product.slug}`;
 const variants = product.variants ?? [];
 const galleryImages = [product.image, ...(product.gallery ?? [])].filter(Boolean).slice(0, 9);

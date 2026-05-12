@@ -258,9 +258,16 @@ export async function getProductsByCategory(category: ProductCategory): Promise<
   return products.filter((product) => product.category === category);
 }
 
-export function getAddToCartUrl(productId: number | string, _returnPath = "/shop") {
+const getAbsoluteReturnUrl = (returnPath = "/shop") => {
+  if (/^https?:\/\//i.test(returnPath)) return returnPath;
+  const path = returnPath.startsWith("/") ? returnPath : `/${returnPath}`;
+  return `${SITE_URL}${path}`;
+};
+
+export function getAddToCartUrl(productId: number | string, returnPath = "/shop") {
   const url = new URL(`${WOOCOMMERCE_URL}/cart/`);
   url.searchParams.set("add-to-cart", String(productId));
+  url.searchParams.set("return_to", getAbsoluteReturnUrl(returnPath));
   return url.toString();
 }
 
