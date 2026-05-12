@@ -107,11 +107,19 @@ const bandcampEmbedSrc = product.bandcampAlbumId
             <div class="mt-5 grid gap-3">
               {variants.map((variant) => (
                 <a
-                  class="grid gap-3 border fs-soft-rule px-4 py-4 transition-colors hover:border-[var(--fs-ink)] hover:bg-[var(--fs-bg-2)] sm:grid-cols-[1fr_auto]"
+                  class="grid gap-3 border fs-soft-rule px-4 py-4 transition-colors hover:border-[var(--fs-ink)] hover:bg-[var(--fs-bg-2)] sm:grid-cols-[1fr_auto_auto] sm:items-center"
                   href={getVariationCheckoutUrl(product.id, variant)}
                 >
-                  <span class="font-medium uppercase tracking-[0.03em]">{variant.label}</span>
-                  <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--fs-accent)]">Buy this edition</span>
+                  <span class="grid gap-1">
+                    <span class="font-medium uppercase tracking-[0.03em]">{variant.label}</span>
+                    {variant.editionLabel && (
+                      <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--fs-mute)]">{variant.editionLabel} next available</span>
+                    )}
+                  </span>
+                  {variant.displayPrice && <span class="font-mono text-[12px] tracking-[0.08em]">{variant.displayPrice}</span>}
+                  <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--fs-accent)]">
+                    {variant.availabilityLabel === "Sold out" ? "Sold out" : "Buy this edition"}
+                  </span>
                 </a>
               ))}
             </div>

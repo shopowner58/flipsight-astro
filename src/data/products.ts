@@ -29,6 +29,9 @@ export interface ProductVariant {
   label: string;
   value: string;
   attributeName: string;
+  displayPrice?: string;
+  editionLabel?: string;
+  availabilityLabel?: string;
 }
 
 export const products: Product[] = [

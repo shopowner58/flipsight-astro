@@ -42,6 +42,14 @@ interface MusicMeta {
   gallery?: string[];
 }
 
+interface ArtEditionMeta {
+  productId: number;
+  variationId: number;
+  displayPrice?: string;
+  editionLabel?: string;
+  availabilityLabel?: string;
+}
+
 const categoryTone: Record<ProductCategory, Pick<Product, "hue" | "chroma" | "aspect">> = {
   music: { hue: 18, chroma: 0.02, aspect: "square" },
   art: { hue: 225, chroma: 0.03, aspect: "portrait" },
@@ -153,7 +161,7 @@ const getCatalog = (product: WooStoreProduct, category: ProductCategory) => {
   return category === "art" ? `FLIPSART-${product.id}` : `WC-${product.id}`;
 };
 
-const getVariants = (product: WooStoreProduct) => {
+const getVariants = (product: WooStoreProduct, artEditionMeta?: Map<number, ArtEditionMeta>) => {
   if (product.type !== "variable") return [];
 
   const variationAttribute = product.attributes?.find((attribute) => attribute.has_variations);
@@ -166,11 +174,15 @@ const getVariants = (product: WooStoreProduct) => {
     product.variations?.map((variation) => {
       const attribute = variation.attributes?.[0];
       const label = formatSizeLabel(attribute?.value ?? "Option");
+      const editionMeta = artEditionMeta?.get(variation.id);
       return {
         id: variation.id,
         label,
         value: termByName.get(label.toLowerCase()) ?? label.toLowerCase().replace(/\s*×\s*/g, "x").replace(/\s+/g, "-"),
         attributeName,
+        displayPrice: editionMeta?.displayPrice,
+        editionLabel: editionMeta?.editionLabel,
+        availabilityLabel: editionMeta?.availabilityLabel,
       };
     }) ?? []
   );
@@ -179,7 +191,7 @@ const getVariants = (product: WooStoreProduct) => {
 const uniqueItems = (items: string[]) =>
   Array.from(new Set(items.map((item) => item?.trim()).filter((item): item is string => Boolean(item))));
 
-const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta): Product => {
+const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta, artEditionMeta?: Map<number, ArtEditionMeta>): Product => {
   const category = getCategoryFromWooProduct(product);
   const tone = categoryTone[category];
   const type = product.type === "variable" ? "variable" : "simple";
@@ -204,7 +216,7 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta): Product
     format: getFormat(product, category),
     year: getYear(product),
     type,
-    variants: getVariants(product),
+    variants: getVariants(product, artEditionMeta),
     ...tone,
   };
 };
@@ -238,11 +250,27 @@ const getMusicMeta = async () => {
   }
 };
 
+const getArtEditionMeta = async () => {
+  try {
+    const response = await fetch(`${WOOCOMMERCE_URL}/wp-json/flipsight/v1/art-editions`, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(10000),
+    });
+
+    if (!response.ok) return new Map<number, ArtEditionMeta>();
+
+    const items = (await response.json()) as ArtEditionMeta[];
+    return new Map(items.map((item) => [item.variationId, item]));
+  } catch {
+    return new Map<number, ArtEditionMeta>();
+  }
+};
+
 let productCache: Promise<Product[]> | undefined;
 
 export async function getProducts(): Promise<Product[]> {
-  productCache ??= Promise.all([getStoreApiProducts(), getMusicMeta()])
-    .then(([wooProducts, musicMeta]) => wooProducts.map((product) => mapWooProduct(product, musicMeta.get(product.id))))
+  productCache ??= Promise.all([getStoreApiProducts(), getMusicMeta(), getArtEditionMeta()])
+    .then(([wooProducts, musicMeta, artEditionMeta]) => wooProducts.map((product) => mapWooProduct(product, musicMeta.get(product.id), artEditionMeta)))
     .catch(() => mockProducts);
 
   return productCache;
