@@ -21,7 +21,7 @@ const pastEvents = displayEvents
 ---
 
 <BaseLayout title="Events - FLIPSIGHT">
-  <div class="fs-page flex flex-col gap-[clamp(64px,8vw,124px)]">
+  <div class="fs-page flex flex-col gap-[clamp(56px,7vw,108px)]">
     <section class="grid gap-8 border-b fs-rule pb-10 md:grid-cols-[5fr_6fr]">
       <div>
         <div class="fs-meta">04 - Events</div>
@@ -33,34 +33,34 @@ const pastEvents = displayEvents
     </section>
 
     {upcomingEvents.length > 0 && (
-      <section>
-        <div class="mb-2 grid gap-4 border-b fs-rule pb-4 md:grid-cols-[2fr_3fr]">
+      <section class="grid gap-8">
+        <div class="grid gap-4 md:grid-cols-[180px_1fr] md:items-end">
           <div>
             <div class="fs-meta">Upcoming</div>
-            <h2 class="fs-display mt-3 text-[clamp(34px,4vw,64px)]">Next on the floor.</h2>
+            <h2 class="fs-display mt-3 text-[clamp(32px,3.8vw,58px)]">Next on the floor.</h2>
           </div>
-          <p class="max-w-lg self-end text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+          <p class="max-w-lg text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
             Openings, label nights and temporary rooms for sound and image.
           </p>
         </div>
-        <div class="grid">
+        <div class="border-t fs-rule">
           {upcomingEvents.map((event) => <EventCard {...event} />)}
         </div>
       </section>
     )}
 
     {pastEvents.length > 0 && (
-      <section>
-        <div class="mb-2 grid gap-4 border-b fs-soft-rule pb-4 md:grid-cols-[2fr_3fr]">
+      <section class="grid gap-8">
+        <div class="grid gap-4 md:grid-cols-[180px_1fr] md:items-end">
           <div>
             <div class="fs-meta-muted">Past</div>
-            <h2 class="fs-display mt-3 text-[clamp(30px,3.4vw,52px)] text-[var(--fs-ink-2)]">Archive of echoes.</h2>
+            <h2 class="fs-display mt-3 text-[clamp(30px,3.2vw,48px)] text-[var(--fs-ink-2)]">Archive of echoes.</h2>
           </div>
-          <p class="max-w-lg self-end text-[14px] leading-relaxed text-[var(--fs-mute)]">
+          <p class="max-w-lg text-[14px] leading-relaxed text-[var(--fs-mute)]">
             Previous FLIPSIGHT rooms, release parties and listening traces.
           </p>
         </div>
-        <div class="grid">
+        <div class="border-t fs-soft-rule">
           {pastEvents.map((event) => <EventCard {...event} />)}
         </div>
       </section>

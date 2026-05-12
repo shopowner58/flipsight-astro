@@ -8,21 +8,28 @@ const day = date.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" 
 const year = date.getFullYear();
 const isPast = event.status === "past";
 const hasRsvpLink = /^https?:\/\//i.test(event.rsvpLink) || event.rsvpLink.startsWith("/");
+const shortLocation = event.location.split(" - ").pop();
 ---
 
-<article class:list={["grid gap-7 border-b fs-soft-rule py-8 md:grid-cols-[120px_1.6fr_1fr_auto]", isPast && "opacity-70"]}>
-  <div>
-    <div class:list={["fs-display text-[44px] leading-none", isPast && "text-[var(--fs-mute)]"]}>{day}</div>
-    <div class="fs-meta-muted mt-2">{year}</div>
-  </div>
-  <div>
-    <div class="fs-meta">{event.time} / {event.location.split(" - ").pop()}</div>
-    <h2 class="fs-display mt-2 text-[clamp(28px,3vw,42px)]">{event.title}</h2>
-    <p class="mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--fs-ink-2)]">{event.description}</p>
-  </div>
-  <div class="pt-2 text-[13px] text-[var(--fs-ink-2)]">{event.location}</div>
-  <div class="flex flex-wrap items-start gap-3 pt-1 md:justify-end">
-    {hasRsvpLink && <Button href={event.rsvpLink} variant={isPast ? "ghost" : "secondary"} target="_blank" rel="noreferrer">{isPast ? "Event archive" : "RSVP / Tickets"}</Button>}
-    {event.facebookLink && <Button href={event.facebookLink} variant="ghost" target="_blank" rel="noreferrer">Facebook Event</Button>}
+<article class:list={["group border-b fs-soft-rule py-7 md:py-8", isPast && "opacity-75"]}>
+  <div class="grid gap-5 md:grid-cols-[132px_1fr] lg:grid-cols-[156px_1fr_auto] lg:items-start">
+    <div class="flex items-baseline gap-3 md:block">
+      <div class:list={["font-mono text-[26px] leading-none tracking-[-0.02em] md:text-[34px]", isPast ? "text-[var(--fs-mute)]" : "text-[var(--fs-ink)]"]}>{day}</div>
+      <div class="fs-meta-muted md:mt-2">{year}</div>
+    </div>
+
+    <div class="max-w-3xl">
+      <div class="fs-meta-muted">{event.time} / {shortLocation}</div>
+      <h2 class="mt-2 max-w-3xl text-[clamp(28px,3.2vw,46px)] font-semibold uppercase leading-[1.02] tracking-normal">
+        {event.title}
+      </h2>
+      <p class="mt-4 max-w-2xl text-[15px] leading-relaxed text-[var(--fs-ink-2)]">{event.description}</p>
+      <div class="mt-5 font-mono text-[12px] uppercase tracking-[0.12em] text-[var(--fs-mute)]">{event.location}</div>
+    </div>
+
+    <div class="flex flex-wrap items-start gap-2 lg:max-w-[220px] lg:justify-end lg:pt-1">
+      {hasRsvpLink && <Button href={event.rsvpLink} variant={isPast ? "ghost" : "secondary"} target="_blank" rel="noreferrer">{isPast ? "Archive" : "RSVP / Tickets"}</Button>}
+      {event.facebookLink && <Button href={event.facebookLink} variant="ghost" target="_blank" rel="noreferrer">Facebook</Button>}
+    </div>
   </div>
 </article>
