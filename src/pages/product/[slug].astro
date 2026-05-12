@@ -3,7 +3,9 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Button from "../../components/Button.astro";
 import ProductGrid from "../../components/ProductGrid.astro";
 import type { Product } from "../../data/products";
-import { getAddToCartUrl, getCheckoutAddToCartUrl, getProducts, getVariationCheckoutUrl, SITE_URL } from "../../lib/woocommerce";
+import { getAddToCartUrl, getCheckoutAddToCartUrl, getProductBySlug, getProducts, getVariationCheckoutUrl, SITE_URL } from "../../lib/woocommerce";
+
+export const prerender = true;
 
 export async function getStaticPaths() {
   const products = await getProducts();
@@ -17,7 +19,12 @@ interface Props {
   product: Product;
 }
 
-const { product } = Astro.props;
+const product = Astro.props.product ?? (await getProductBySlug(Astro.params.slug ?? ""));
+
+if (!product) {
+  return Astro.redirect("/shop");
+}
+
 const products = await getProducts();
 const related = products.filter((item) => item.category === product.category && item.slug !== product.slug).slice(0, 3);
 const tone = `oklch(0.84 ${product.chroma} ${product.hue})`;
