@@ -29,6 +29,7 @@ const featuredRelease =
   mockProducts.find((product) => product.category === "music") ??
   products[0] ??
   mockProducts[0];
+const heroMusicImage = "/media/cj-instores.png";
 const featuredArt =
   products.find((product) => product.catalog === "FLIPSART008") ??
   products.find((product) => product.slug === "the-funk-expedition") ??
@@ -65,7 +66,7 @@ const youtubeVideos = [
 <BaseLayout>
   <div class="fs-page fs-page-stack pt-[clamp(48px,7vw,112px)]">
     <Hero
-      musicImage={featuredRelease.image}
+      musicImage={heroMusicImage}
       musicTitle={featuredRelease.title}
       artImage={featuredArt.image}
       artTitle={featuredArt.title}
