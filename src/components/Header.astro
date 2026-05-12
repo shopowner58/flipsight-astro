@@ -1,5 +1,5 @@
 ---
-import { getCheckoutUrl } from "../lib/woocommerce";
+import { getCartUrl, WOOCOMMERCE_URL } from "../lib/woocommerce";
 
 const leftNav = [
   { href: "/music", label: "Music" },
@@ -45,10 +45,10 @@ const mobileNav = [...leftNav, ...rightNav];
         </a>
       ))}
       <a
-        class="inline-flex h-9 w-9 items-center justify-center border border-[var(--fs-ink)] transition-colors hover:bg-[var(--fs-ink)] hover:text-[var(--fs-bg)]"
-        href={getCheckoutUrl()}
-        aria-label="Checkout"
-        title="Checkout"
+        class="relative inline-flex h-9 w-9 items-center justify-center border border-[var(--fs-ink)] transition-colors hover:bg-[var(--fs-ink)] hover:text-[var(--fs-bg)]"
+        href={getCartUrl()}
+        aria-label="Cart"
+        title="Cart"
       >
         <svg aria-hidden="true" class="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter">
           <path d="M6.5 8.5h13l-1.4 8H8.1l-2-11H3.5" />
@@ -56,6 +56,7 @@ const mobileNav = [...leftNav, ...rightNav];
           <path d="M17 20h.01" />
           <path d="M9 8.5a3 3 0 0 1 6 0" />
         </svg>
+        <span data-cart-count class="absolute -right-2 -top-2 hidden min-w-[18px] border border-[var(--fs-ink)] bg-[var(--fs-ink)] px-1 py-[1px] text-center font-mono text-[9px] leading-[14px] text-[var(--fs-bg)]">0</span>
       </a>
     </nav>
 
@@ -65,8 +66,36 @@ const mobileNav = [...leftNav, ...rightNav];
         {mobileNav.map((item) => (
           <a class="font-mono text-[11px] uppercase tracking-[0.14em]" href={item.href}>{item.label}</a>
         ))}
-        <a class="font-mono text-[11px] uppercase tracking-[0.14em]" href={getCheckoutUrl()}>Checkout</a>
+        <a class="font-mono text-[11px] uppercase tracking-[0.14em]" href={getCartUrl()}>
+          Cart <span data-cart-count class="hidden">0</span>
+        </a>
       </nav>
     </details>
   </div>
+  <script define:vars={{ cartEndpoint: `${WOOCOMMERCE_URL}/wp-json/wc/store/v1/cart` }}>
+    async function updateFlipsightCartCount() {
+      const badges = document.querySelectorAll("[data-cart-count]");
+      if (!badges.length) return;
+
+      try {
+        const response = await fetch(cartEndpoint, {
+          credentials: "include",
+          headers: { Accept: "application/json" },
+        });
+        if (!response.ok) return;
+
+        const cart = await response.json();
+        const count = Number(cart.items_count || 0);
+        badges.forEach((badge) => {
+          badge.textContent = String(count);
+          badge.classList.toggle("hidden", count < 1);
+        });
+      } catch {
+        badges.forEach((badge) => badge.classList.add("hidden"));
+      }
+    }
+
+    updateFlipsightCartCount();
+    window.addEventListener("focus", updateFlipsightCartCount);
+  </script>
 </header>
