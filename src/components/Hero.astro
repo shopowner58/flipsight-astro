@@ -83,15 +83,18 @@ const {
 
 </section>
 
-<section class="grid items-end gap-8 border-b fs-soft-rule pb-10 pt-[clamp(36px,5vw,80px)] md:grid-cols-[7fr_4fr]">
-  <div>
-    <div class="fs-meta">FLIPSIGHT - Music &amp; Art</div>
-    <h1 class="fs-display mt-4 max-w-4xl text-[clamp(42px,6vw,96px)]">{title}</h1>
+<section class="grid items-start gap-7 border-b fs-soft-rule pb-[clamp(32px,4vw,56px)] pt-[clamp(30px,4vw,60px)] md:grid-cols-[2fr_5fr_4fr]">
+  <div class="border-t fs-rule pt-3">
+    <div class="fs-meta">FLIPSIGHT</div>
+    <div class="fs-meta-muted mt-2">Music / Art / Objects</div>
   </div>
-  <div class="grid gap-6">
-    <p class="max-w-md text-[17px] leading-relaxed text-[var(--fs-ink-2)]">{subtitle}</p>
+  <div>
+    <h1 class="fs-display max-w-3xl text-[clamp(34px,4.6vw,68px)]">{title}</h1>
+  </div>
+  <div class="grid gap-5 md:pt-1">
+    <p class="max-w-md text-[15px] leading-relaxed text-[var(--fs-ink-2)]">{subtitle}</p>
     <div>
-      <Button href={ctaHref} variant="secondary">{ctaLabel}</Button>
+      <Button href={ctaHref} variant="ghost">{ctaLabel}</Button>
     </div>
   </div>
 </section>
