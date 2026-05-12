@@ -195,7 +195,7 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta): Product
     category,
     price: formatPrice(product),
     image,
-    gallery: uniqueItems([...wooGallery, ...metaGallery].filter((item) => item !== image)).slice(0, 4),
+    gallery: uniqueItems([...wooGallery, ...metaGallery].filter((item) => item !== image)).slice(0, 8),
     stockStatus: product.stock_status === "outofstock" || product.is_in_stock === false ? "Sold out" : product.stock_status === "onbackorder" ? "Low stock" : "Available",
     editionInfo: getEditionInfo(product, category),
     description: getDescription(product, category),
