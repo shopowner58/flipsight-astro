@@ -1,0 +1,88 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/Button.astro";
+
+const title = "404 - FLIPSIGHT";
+const description = "The needle skipped a groove. Return to the FLIPSIGHT catalogue.";
+---
+
+<BaseLayout title={title} description={description} canonicalUrl="">
+  <section class="fs-page min-h-[calc(100vh-220px)]">
+    <div class="grid min-h-[62vh] items-center gap-[clamp(42px,7vw,120px)] border-y fs-rule py-[clamp(56px,8vw,120px)] lg:grid-cols-[4fr_7fr]">
+      <div class="grid justify-items-start gap-8">
+        <div class="fs-meta-muted">404 / skipped groove</div>
+        <div class="relative grid size-[clamp(116px,16vw,220px)] place-items-center">
+          <div class="absolute inset-0 rounded-full border fs-soft-rule opacity-70"></div>
+          <div class="absolute inset-[12%] rounded-full border fs-soft-rule opacity-50"></div>
+          <div class="absolute inset-[27%] rounded-full border fs-soft-rule opacity-35"></div>
+          <img
+            class="fs-404-icon relative z-10 size-[clamp(72px,9vw,132px)]"
+            src="/brand/flipsight-icon-black.svg"
+            alt="FLIPSIGHT icon"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
+
+      <div class="grid gap-8">
+        <div>
+          <h1 class="fs-display max-w-5xl text-[clamp(52px,8.3vw,132px)]">
+            Oops.<br />Your needle skipped a groove.
+          </h1>
+          <p class="mt-7 max-w-2xl text-[clamp(17px,1.7vw,24px)] leading-relaxed text-[var(--fs-ink-2)]">
+            This page slipped into a silent loop. Maybe we are pressing a fresh track, maybe this was a rare B-side that is no longer spinning.
+          </p>
+        </div>
+
+        <div class="grid gap-4 border-y fs-soft-rule py-6 md:grid-cols-[1fr_auto] md:items-center">
+          <p class="max-w-xl text-[14px] leading-relaxed text-[var(--fs-mute)]">
+            There is still plenty in the crate: records, FLIPSART editions, rooms and small signals from Antwerp. Return to the turntable and keep the records moving.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <Button href="/" variant="primary">Back home</Button>
+            <Button href="/music" variant="ghost">Music room</Button>
+            <Button href="/art" variant="ghost">Gallery</Button>
+          </div>
+        </div>
+
+        <div class="fs-meta-muted">Rare mispresses happen, even in smooth collections.</div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .fs-404-icon {
+    animation: fs-404-spin 9s linear infinite;
+    transform-origin: 50% 50%;
+  }
+
+  @keyframes fs-404-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    46% {
+      transform: rotate(166deg);
+    }
+
+    49% {
+      transform: rotate(159deg);
+    }
+
+    52% {
+      transform: rotate(176deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fs-404-icon {
+      animation: none;
+    }
+  }
+</style>
