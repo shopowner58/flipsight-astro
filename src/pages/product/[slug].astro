@@ -41,6 +41,10 @@ const simpleArtFormat = product.format?.split("·").pop()?.trim() ?? product.for
 const bandcampEmbedSrc = product.bandcampAlbumId
   ? `https://bandcamp.com/EmbeddedPlayer/album=${product.bandcampAlbumId}/size=large/bgcol=ffffff/linkcol=333333/artwork=none/transparent=true/`
   : "";
+const checkoutNote =
+  product.category === "art"
+    ? "Secure checkout, live stock control and edition handling are processed through the FLIPSIGHT shop. Every work is confirmed before packing, shipping or pickup."
+    : "Secure checkout, live stock control and shipping are processed through the FLIPSIGHT shop. Orders ship from Antwerp when stock is available.";
 ---
 
 <BaseLayout title={`${product.title} - FLIPSIGHT`} canonicalUrl={canonicalUrl}>
@@ -96,16 +100,13 @@ const bandcampEmbedSrc = product.bandcampAlbumId
           </div>
         </dl>
 
-        {variants.length > 0 ? (
-          <div class="mt-3 border-y fs-rule py-5">
-            <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-              <div>
-                <div class="fs-meta-muted">Choose format</div>
-                <div class="fs-display mt-2 text-[30px]">{product.price}</div>
-              </div>
-              <div class="fs-meta">{variants.length} sizes</div>
-            </div>
-            <div class="mt-5 grid gap-3">
+      {variants.length > 0 ? (
+        <div class="mt-3 border-y fs-rule py-5">
+          <div class="flex items-end justify-between gap-4">
+            <div class="fs-meta-muted">Choose format</div>
+            <div class="fs-meta">{variants.length} sizes</div>
+          </div>
+          <div class="mt-4 grid gap-3">
               {variants.map((variant) => (
                 <a
                   class="grid gap-3 border fs-soft-rule px-4 py-4 transition-colors hover:border-[var(--fs-ink)] hover:bg-[var(--fs-bg-2)] sm:grid-cols-[1fr_auto_auto] sm:items-center"
@@ -162,7 +163,7 @@ const bandcampEmbedSrc = product.bandcampAlbumId
         <div class="border-t fs-soft-rule pt-5">
           <div class="fs-meta">{product.category === "art" ? "FLIPSART" : "Checkout"}</div>
           <p class="mt-3 max-w-lg text-[13px] leading-relaxed text-[var(--fs-ink-2)]">
-            Browse the catalogue in Astro. Cart, checkout, payments, stock and order handling continue securely in WooCommerce.
+            {checkoutNote}
           </p>
         </div>
 
