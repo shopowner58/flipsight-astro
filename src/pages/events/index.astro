@@ -2,15 +2,14 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import EventCard from "../../components/EventCard.astro";
 import { events as mockEvents } from "../../data/events";
+import { getBelgiumDateKey, isUpcomingEvent } from "../../lib/events";
 import { getEvents } from "../../lib/wordpress";
 
 const events = await getEvents();
 const displayEvents = events.length > 0 ? events : mockEvents;
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+const todayKey = getBelgiumDateKey();
 const isUpcoming = (event: (typeof displayEvents)[number]) => {
-  if (event.status) return event.status === "upcoming";
-  return new Date(`${event.date}T23:59:59`) >= today;
+  return isUpcomingEvent(event, todayKey);
 };
 const upcomingEvents = displayEvents
   .filter(isUpcoming)

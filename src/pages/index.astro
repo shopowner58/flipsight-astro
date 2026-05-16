@@ -7,21 +7,18 @@ import Button from "../components/Button.astro";
 import { getProducts } from "../lib/woocommerce";
 import { products as mockProducts } from "../data/products";
 import { events as mockEvents } from "../data/events";
+import { getBelgiumDateKey, isUpcomingEvent } from "../lib/events";
 import { getEvents, getHomepageOptions } from "../lib/wordpress";
 
 const products = await getProducts();
 const events = await getEvents();
 const homepageOptions = await getHomepageOptions();
 const displayEvents = events.length > 0 ? events : mockEvents;
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+const todayKey = getBelgiumDateKey();
 const upcomingEvents = displayEvents
-  .filter((event) => {
-    if (event.status) return event.status === "upcoming";
-    return new Date(`${event.date}T23:59:59`) >= today;
-  })
+  .filter((event) => isUpcomingEvent(event, todayKey))
   .sort((a, b) => a.date.localeCompare(b.date));
-const homeEvents = (upcomingEvents.length > 0 ? upcomingEvents : displayEvents.sort((a, b) => b.date.localeCompare(a.date))).slice(0, 2);
+const homeEvents = (upcomingEvents.length > 0 ? upcomingEvents : [...displayEvents].sort((a, b) => b.date.localeCompare(a.date))).slice(0, 2);
 const formatHomeEventDate = (dateString: string) => {
   const eventDate = new Date(`${dateString}T12:00:00`);
   return {
