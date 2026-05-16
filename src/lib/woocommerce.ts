@@ -126,6 +126,12 @@ const getYear = (product: WooStoreProduct) => {
 
 const getFormat = (product: WooStoreProduct, category: ProductCategory) => {
   if (category === "music") return '12" vinyl';
+  if (category === "art") {
+    const sizes = getAttributeTerms(product, /^size$/i).map(formatSizeLabel);
+    return ["Fine art canvas print on 260 gsm natural white cotton canvas.", sizes.join(" / ")]
+      .filter(Boolean)
+      .join(" · ");
+  }
 
   const medium = getAttributeTerms(product, /^medium$/i)[0];
   const sizes = getAttributeTerms(product, /^size$/i).map(formatSizeLabel);

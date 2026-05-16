@@ -132,7 +132,7 @@ function flipsight_coa_build_data(WC_Order $order, int $item_id, WC_Order_Item_P
     $sku = $product ? (string) $product->get_sku() : '';
     $title = $source ? $source->get_name() : $item->get_name();
     $size = flipsight_coa_get_size($item, $product, $source);
-    $medium = flipsight_coa_get_attribute($source, 'medium') ?: 'Digital Painting on Canvas';
+    $medium = 'Fine art canvas print on 260 gsm natural white cotton canvas.';
     $year = flipsight_coa_get_year($source);
     $edition = flipsight_coa_get_edition_data($order, $item, $product, $source, $size);
     $edition_number = $edition['number'];
@@ -307,34 +307,32 @@ function flipsight_coa_render_print_page(array $data): void {
   <style>
     @page { size: A4; margin: 0; }
     * { box-sizing: border-box; }
-    body { margin: 0; background: #e8e7e2; color: #f5f3ed; font-family: Helvetica, Arial, sans-serif; }
+    body { margin: 0; background: #e8e7e2; color: #111; font-family: Helvetica, Arial, sans-serif; }
     .tools { position: fixed; top: 14px; right: 14px; display: flex; gap: 8px; z-index: 5; }
-    .tools button { border: 1px solid #111; background: #f5f3ed; color: #111; padding: 10px 14px; font: 700 11px/1 Helvetica, Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; }
-    .sheet { width: 210mm; min-height: 297mm; margin: 18px auto; padding: 18mm 17mm; background: #050505; position: relative; overflow: hidden; }
-    .sheet:before { content: ""; position: absolute; inset: 12mm; border: 1px solid rgba(245,243,237,.16); pointer-events: none; }
-    .sheet:after { content: ""; position: absolute; inset: -70mm -80mm auto auto; width: 180mm; height: 180mm; border-radius: 50%; border: 1px solid rgba(245,243,237,.08); box-shadow: 0 0 0 28mm rgba(245,243,237,.025), 0 0 0 58mm rgba(245,243,237,.018); pointer-events: none; }
+    .tools button { border: 1px solid #111; background: #fff; color: #111; padding: 10px 14px; font: 700 11px/1 Helvetica, Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; }
+    .sheet { width: 210mm; min-height: 297mm; margin: 18px auto; padding: 18mm 17mm; background: #fff; position: relative; overflow: hidden; }
+    .sheet:before { content: ""; position: absolute; inset: 12mm; border: 1px solid rgba(17,17,17,.16); pointer-events: none; }
+    .sheet:after { content: ""; position: absolute; inset: -70mm -80mm auto auto; width: 180mm; height: 180mm; border-radius: 50%; border: 1px solid rgba(17,17,17,.06); box-shadow: 0 0 0 28mm rgba(17,17,17,.018), 0 0 0 58mm rgba(17,17,17,.012); pointer-events: none; }
     .content { position: relative; z-index: 1; min-height: 261mm; display: flex; flex-direction: column; }
-    header { display: flex; justify-content: space-between; align-items: start; border-bottom: 1px solid rgba(245,243,237,.34); padding-bottom: 9mm; }
+    header { display: flex; justify-content: space-between; align-items: start; border-bottom: 1px solid rgba(17,17,17,.34); padding-bottom: 9mm; }
     .brand { display: grid; gap: 4mm; }
-    .brand img { width: 14mm; height: 14mm; object-fit: contain; filter: invert(1); }
-    .meta { color: rgba(245,243,237,.62); font: 700 8px/1.5 Helvetica, Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; }
+    .brand img { width: 14mm; height: 14mm; object-fit: contain; }
+    .meta { color: rgba(17,17,17,.62); font: 700 8px/1.5 Helvetica, Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; }
     h1 { margin: 15mm 0 6mm; max-width: 112mm; font: 700 38px/.93 Helvetica, Arial, sans-serif; letter-spacing: -.03em; }
-    .intro { max-width: 118mm; margin: 0 0 14mm; color: rgba(245,243,237,.66); font-size: 10px; line-height: 1.7; }
-    .badge { border: 1px solid rgba(245,243,237,.24); padding: 5mm; min-width: 43mm; align-self: center; }
-    .badge strong { display: block; font-size: 16px; line-height: 1; }
+    .intro { max-width: 118mm; margin: 0 0 14mm; color: rgba(17,17,17,.66); font-size: 10px; line-height: 1.7; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9mm 12mm; }
-    .field { border-bottom: 1px solid rgba(245,243,237,.56); padding-bottom: 3mm; min-height: 17mm; }
-    .label { display: block; color: rgba(245,243,237,.58); font: 700 7px/1 Helvetica, Arial, sans-serif; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 3mm; }
+    .field { border-bottom: 1px solid rgba(17,17,17,.56); padding-bottom: 3mm; min-height: 17mm; }
+    .label { display: block; color: rgba(17,17,17,.58); font: 700 7px/1 Helvetica, Arial, sans-serif; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 3mm; }
     .value { display: block; font-size: 13px; line-height: 1.35; }
     .wide { grid-column: 1 / -1; }
-    .text { margin-top: 9mm; display: grid; gap: 5mm; color: rgba(245,243,237,.70); font-size: 8.5px; line-height: 1.6; }
-    .text strong { color: #f5f3ed; display: block; margin-bottom: 1.5mm; font-size: 7px; letter-spacing: .14em; text-transform: uppercase; }
+    .text { margin-top: 9mm; display: grid; gap: 5mm; color: rgba(17,17,17,.72); font-size: 8.5px; line-height: 1.6; }
+    .text strong { color: #111; display: block; margin-bottom: 1.5mm; font-size: 7px; letter-spacing: .14em; text-transform: uppercase; }
     footer { margin-top: auto; padding-top: 10mm; }
     .signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 16mm; margin-top: 10mm; }
-    .signature { border-top: 1px solid rgba(245,243,237,.62); padding-top: 3mm; }
-    .small { color: rgba(245,243,237,.58); font-size: 7px; letter-spacing: .12em; text-transform: uppercase; }
+    .signature { border-top: 1px solid rgba(17,17,17,.62); padding-top: 3mm; }
+    .small { color: rgba(17,17,17,.58); font-size: 7px; letter-spacing: .12em; text-transform: uppercase; }
     @media print {
-      body { background: #050505; }
+      body { background: #fff; }
       .tools { display: none; }
       .sheet { margin: 0; box-shadow: none; }
     }
@@ -354,16 +352,9 @@ function flipsight_coa_render_print_page(array $data): void {
         <div class="meta">Certificate of Authenticity</div>
       </header>
 
-      <div style="display:flex;justify-content:space-between;gap:18mm;">
-        <div>
-          <h1>Certificate of Authenticity</h1>
-          <p class="intro">This certificate confirms the authenticity of the artwork described below. It belongs to the stated edition and should remain with the work as part of its provenance.</p>
-        </div>
-        <div class="badge">
-          <span class="meta">COA</span>
-          <strong><?php echo esc_html($data['edition']); ?></strong>
-          <span class="small"><?php echo esc_html($data['auth_id']); ?></span>
-        </div>
+      <div>
+        <h1>Certificate of Authenticity</h1>
+        <p class="intro">This certificate confirms the authenticity of the artwork described below. It belongs to the stated edition and should remain with the work as part of its provenance.</p>
       </div>
 
       <section class="grid">
@@ -395,13 +386,12 @@ function flipsight_coa_render_print_page(array $data): void {
 
       <section class="text">
         <p><strong>Provenance</strong>This work is part of the FLIPSART series, derived from the visual world of FLIPSIGHT. The series expands selected music, event and release visuals into collectible physical artworks.</p>
-        <p><strong>Rights</strong>The purchase of this artwork concerns the physical object only. No copyright, reproduction right, commercial usage right, digital exploitation right or right to create derivative works is transferred to the buyer. All intellectual property rights remain with FLIPSIGHT and/or the relevant rights holder, with all rights reserved.</p>
+        <p><strong>Rights</strong>The purchase of this artwork concerns the physical object only. No copyright, reproduction right, commercial usage right, digital exploitation right or right to create derivative works is transferred to the buyer. All intellectual property rights remain with FLIPSIGHT and/or the relevant rights holder, with F. Lagrange acknowledged as the creator of the visual work.</p>
         <p><strong>Authenticity</strong>FLIPSIGHT certifies that the artwork described above is authentic and part of the stated edition. No additional copies will be produced outside this edition, except for artist proofs, prototypes or archival proofs where explicitly indicated.</p>
       </section>
 
       <footer>
         <div class="meta">Authenticated by FLIPSIGHT / FLIPSART</div>
-        <p class="small">Hand-finished, reviewed and issued in Antwerp, Belgium.</p>
         <div class="signatures">
           <div class="signature">
             <div class="small">Date: <?php echo esc_html($data['date']); ?></div>
