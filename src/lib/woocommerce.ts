@@ -2,7 +2,7 @@ import { products as mockProducts } from "../data/products";
 import type { Product, ProductCategory } from "../data/products";
 
 export const SITE_URL = (import.meta.env.PUBLIC_SITE_URL ?? "https://flipsight.be").replace(/\/$/, "");
-export const WOOCOMMERCE_URL = (import.meta.env.PUBLIC_WOOCOMMERCE_URL ?? "https://flipsight.be").replace(/\/$/, "");
+export const WOOCOMMERCE_URL = (import.meta.env.PUBLIC_WOOCOMMERCE_URL ?? "https://shop.flipsight.be").replace(/\/$/, "");
 
 interface WooStoreProduct {
   id: number;
@@ -279,7 +279,10 @@ let productCache: Promise<Product[]> | undefined;
 export async function getProducts(): Promise<Product[]> {
   productCache ??= Promise.all([getStoreApiProducts(), getMusicMeta(), getArtEditionMeta()])
     .then(([wooProducts, musicMeta, artEditionMeta]) => wooProducts.map((product) => mapWooProduct(product, musicMeta.get(product.id), artEditionMeta)))
-    .catch(() => mockProducts);
+    .catch((error) => {
+      if (import.meta.env.DEV) return mockProducts;
+      throw error;
+    });
 
   return productCache;
 }
