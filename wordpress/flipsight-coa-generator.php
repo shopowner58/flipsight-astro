@@ -295,8 +295,6 @@ function flipsight_coa_parse_edition_total(WC_Product $product, string $size): i
 function flipsight_coa_render_print_page(array $data): void {
     nocache_headers();
     header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
-
-    $logo = get_site_icon_url(96) ?: '';
     ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -311,12 +309,10 @@ function flipsight_coa_render_print_page(array $data): void {
     .tools { position: fixed; top: 14px; right: 14px; display: flex; gap: 8px; z-index: 5; }
     .tools button { border: 1px solid #111; background: #fff; color: #111; padding: 10px 14px; font: 700 11px/1 Helvetica, Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; }
     .sheet { width: 210mm; min-height: 297mm; margin: 18px auto; padding: 18mm 17mm; background: #fff; position: relative; overflow: hidden; }
-    .sheet:before { content: ""; position: absolute; inset: 12mm; border: 1px solid rgba(17,17,17,.16); pointer-events: none; }
-    .sheet:after { content: ""; position: absolute; inset: -70mm -80mm auto auto; width: 180mm; height: 180mm; border-radius: 50%; border: 1px solid rgba(17,17,17,.06); box-shadow: 0 0 0 28mm rgba(17,17,17,.018), 0 0 0 58mm rgba(17,17,17,.012); pointer-events: none; }
     .content { position: relative; z-index: 1; min-height: 261mm; display: flex; flex-direction: column; }
     header { display: flex; justify-content: space-between; align-items: start; border-bottom: 1px solid rgba(17,17,17,.34); padding-bottom: 9mm; }
     .brand { display: grid; gap: 4mm; }
-    .brand img { width: 14mm; height: 14mm; object-fit: contain; }
+    .brand-logo { width: 14mm; height: 14mm; display: block; fill: #111; }
     .meta { color: rgba(17,17,17,.62); font: 700 8px/1.5 Helvetica, Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; }
     h1 { margin: 15mm 0 6mm; max-width: 112mm; font: 700 38px/.93 Helvetica, Arial, sans-serif; letter-spacing: -.03em; }
     .intro { max-width: 118mm; margin: 0 0 14mm; color: rgba(17,17,17,.66); font-size: 10px; line-height: 1.7; }
@@ -346,7 +342,9 @@ function flipsight_coa_render_print_page(array $data): void {
     <div class="content">
       <header>
         <div class="brand">
-          <?php if ($logo) : ?><img src="<?php echo esc_url($logo); ?>" alt="FLIPSIGHT"><?php endif; ?>
+          <svg class="brand-logo" aria-label="FLIPSIGHT" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 194.9 194.9">
+            <path d="M88.25,144.53c-4.19.86-6.91,4.99-6.05,9.17l2.01,9.8,37.47-7.72c6.68-1.45,12.65-4.04,17.89-7.75,5.26-3.72,9.74-8.51,13.44-14.37l.21-.36c3.16-5.56,5.24-11.19,6.24-16.9,1.01-5.77.89-11.61-.34-17.51h.03s-5.02-24.45-5.02-24.45c-4.04,6.3-8.95,11.9-14.74,16.59l2.34,11.43.04.03c.77,3.64.83,7.28.2,10.92-.63,3.61-1.96,7.24-3.99,10.87-2.45,3.85-5.32,6.94-8.61,9.27-3.3,2.33-7.09,3.97-11.35,4.91l-29.77,6.07ZM35.76,96.1l5.02,24.45c4.04-6.3,8.95-11.9,14.74-16.59l-2.34-11.43-.04-.03c-.76-3.64-.83-7.28-.2-10.92.63-3.61,1.96-7.24,3.99-10.87,2.45-3.85,5.32-6.94,8.61-9.27,3.3-2.33,7.09-3.97,11.35-4.91v.03s29.77-6.11,29.77-6.11c4.19-.86,6.91-4.99,6.05-9.17l-2.01-9.8-37.38,7.67-.1.06c-6.68,1.45-12.65,4.04-17.89,7.75-5.26,3.72-9.74,8.51-13.44,14.37l-.21.36c-3.16,5.56-5.24,11.19-6.24,16.9-1.01,5.77-.89,11.61.34,17.51h-.03ZM2.02,117.09c10.85,52.7,62.37,86.63,115.07,75.78,52.7-10.85,86.63-62.37,75.78-115.07C182.02,25.1,130.5-8.83,77.8,2.02,25.1,12.87-8.83,64.39,2.02,117.09ZM80.77,19.07c14.9-3.54,31.16-1.61,44.57,3.28l.51,2.51.21,1.02,1.47,7.17c.77,3.64.83,7.28.2,10.92-.63,3.61-1.96,7.24-3.99,10.87-2.45,3.85-5.32,6.94-8.61,9.27-3.3,2.34-7.09,3.97-11.35,4.91l-28.72,5.86c-4.69.96-7.74,5.59-6.78,10.28l1.82,8.88,37.34-7.7c6.68-1.45,12.65-4.04,17.89-7.75,5.26-3.72,9.74-8.51,13.44-14.37l.21-.36c3.16-5.55,5.24-11.19,6.24-16.9.59-3.36.78-6.75.6-10.16l-.06-3.22c14.86,11.26,25.96,28.07,30.02,47.76,8.88,43.12-19.13,85.29-62.26,94.17-14.98,3.08-30.9,1.49-44.29-3.37l-.55-2.68-1.33-7.64c-.77-3.64-.83-7.28-.2-10.92.63-3.61,1.96-7.24,3.99-10.87,2.45-3.85,5.32-6.94,8.61-9.27,3.3-2.34,7.09-3.97,11.36-4.88l28.72-5.89c4.69-.96,7.74-5.59,6.78-10.28l-1.82-8.88-37.34,7.7c-6.68,1.45-12.65,4.04-17.89,7.75-5.26,3.72-9.74,8.51-13.44,14.37l-.21.36c-3.16,5.55-5.24,11.19-6.24,16.9-.57,3.28-.77,6.59-.62,9.92h0s0,.06,0,.06c0,.06,0,.12,0,.18,0,0,0,0,0,0l.23,2.91c-14.87-11.26-25.88-27.75-29.94-47.46C10.49,70.4,37.65,27.95,80.77,19.07Z"/>
+          </svg>
           <div class="meta">FLIPSIGHT / FLIPSART</div>
         </div>
         <div class="meta">Certificate of Authenticity</div>
