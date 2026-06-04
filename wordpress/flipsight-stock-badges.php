@@ -19,7 +19,7 @@ function flipsight_stock_badges_get_badge($product = null) {
     }
 
     $sku = strtoupper((string) $product->get_sku());
-    if (!preg_match('/^FLIPS\\d{3}$/', $sku)) {
+    if (!preg_match('/^FLIPSW?\\d{3}$/', $sku)) {
         return null;
     }
 
