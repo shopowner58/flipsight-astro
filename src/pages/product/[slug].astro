@@ -4,6 +4,7 @@ import Button from "../../components/Button.astro";
 import ProductGrid from "../../components/ProductGrid.astro";
 import type { Product } from "../../data/products";
 import { getAddToCartUrl, getCheckoutAddToCartUrl, getProductBySlug, getProducts, getVariationCheckoutUrl, SITE_URL } from "../../lib/woocommerce";
+import { getStockBadgeTone, getStockLabel, hasStockBadge } from "../../lib/stock";
 
 export const prerender = true;
 
@@ -46,6 +47,7 @@ const checkoutNote =
   product.category === "art"
     ? "Secure checkout, live stock control and edition handling are processed through the FLIPSIGHT shop. Every work is confirmed before packing, shipping or pickup."
     : "Secure checkout, live stock control and shipping are processed through the FLIPSIGHT shop. Orders ship from Antwerp when stock is available.";
+const stockLabel = getStockLabel(product.stockStatus);
 ---
 
 <BaseLayout title={`${product.title} - FLIPSIGHT`} canonicalUrl={canonicalUrl}>
@@ -58,8 +60,13 @@ const checkoutNote =
 
     <section class="grid items-start gap-[clamp(40px,5vw,96px)] lg:grid-cols-[1.2fr_1fr]">
       <div class="lg:sticky lg:top-28">
-        <div class={`fs-vinyl-art ${product.aspect === "portrait" ? "aspect-[4/5]" : "aspect-square"}`} style={`--tone: ${tone}`}>
+        <div class={`fs-vinyl-art relative overflow-hidden ${product.aspect === "portrait" ? "aspect-[4/5]" : "aspect-square"}`} style={`--tone: ${tone}`}>
           {product.image && <img class="h-full w-full object-cover" src={product.image} alt={product.title} />}
+          {hasStockBadge(product.stockStatus) && (
+            <span class={`absolute left-4 top-4 z-10 rounded-none px-4 py-3 font-mono text-[11px] uppercase tracking-[0.16em] shadow-sm ${getStockBadgeTone(product.stockStatus)}`}>
+              {stockLabel}
+            </span>
+          )}
         </div>
         {galleryImages.length > 1 && (
           <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -97,7 +104,11 @@ const checkoutNote =
           </div>
           <div class="grid grid-cols-[140px_1fr] gap-5 py-4">
             <dt class="fs-meta-muted">Status</dt>
-            <dd>{product.stockStatus}</dd>
+            <dd>
+              <span class={`inline-flex px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] ${getStockBadgeTone(product.stockStatus)}`}>
+                {stockLabel}
+              </span>
+            </dd>
           </div>
         </dl>
 

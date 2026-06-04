@@ -2,6 +2,7 @@
 import Button from "./Button.astro";
 import type { Product } from "../data/products";
 import { getAddToCartUrl, getCheckoutAddToCartUrl } from "../lib/woocommerce";
+import { getStockBadgeTone, getStockLabel, hasStockBadge } from "../lib/stock";
 
 type Props = Pick<Product, "id" | "slug" | "title" | "category" | "price" | "image" | "stockStatus" | "editionInfo" | "artist" | "catalog" | "format" | "hue" | "chroma" | "aspect" | "type" | "variants">;
 
@@ -20,11 +21,17 @@ const buyLabel =
     : product.category === "art"
       ? "Buy now"
       : "Add to cart";
+const stockLabel = getStockLabel(product.stockStatus);
 ---
 
 <article class="group grid gap-4">
   <a href={`/product/${product.slug}`} class={`fs-vinyl-art relative block overflow-hidden ${aspectClass}`} style={`--tone: ${tone}`}>
     {product.image && <img class="absolute inset-0 h-full w-full object-cover" src={product.image} alt={product.title} />}
+    {hasStockBadge(product.stockStatus) && (
+      <span class={`absolute left-3 top-3 z-10 rounded-none px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] shadow-sm ${getStockBadgeTone(product.stockStatus)}`}>
+        {stockLabel}
+      </span>
+    )}
     <div class="absolute inset-x-0 bottom-0 flex justify-between p-4 font-mono text-[10px] uppercase tracking-[0.1em] text-[rgba(17,17,16,0.68)] mix-blend-multiply">
       <span>{product.category} / {product.catalog}</span>
       <span>{product.image ? "" : "FLIPSIGHT"}</span>
@@ -34,7 +41,7 @@ const buyLabel =
   <div class="border-t fs-soft-rule pt-3">
     <div class="mb-2 flex justify-between gap-4">
       <span class="fs-meta-muted">{product.catalog}</span>
-      <span class="fs-meta-muted text-right">{product.stockStatus}</span>
+      <span class={`fs-meta-muted text-right ${product.stockStatus === "Sold out" ? "text-[var(--fs-ink)]" : ""}`}>{stockLabel}</span>
     </div>
     <a href={`/product/${product.slug}`} class="fs-card-hover block">
       <h3 class="fs-display text-[17px] leading-tight">

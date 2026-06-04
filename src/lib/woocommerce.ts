@@ -24,6 +24,7 @@ interface WooStoreProduct {
   price_html?: string;
   stock_status?: string;
   is_in_stock?: boolean;
+  low_stock_remaining?: number | null;
   categories?: Array<{ name: string; slug: string }>;
   images?: Array<{ src: string; alt?: string; thumbnail?: string }>;
   short_description?: string;
@@ -214,7 +215,12 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta, artEditi
     price: formatPrice(product),
     image,
     gallery: uniqueItems([...wooGallery, ...metaGallery].filter((item) => item !== image)).slice(0, 8),
-    stockStatus: product.stock_status === "outofstock" || product.is_in_stock === false ? "Sold out" : product.stock_status === "onbackorder" ? "Low stock" : "Available",
+    stockStatus:
+      product.stock_status === "outofstock" || product.is_in_stock === false
+        ? "Sold out"
+        : product.stock_status === "onbackorder" || typeof product.low_stock_remaining === "number"
+          ? "Low stock"
+          : "Available",
     editionInfo: getEditionInfo(product, category),
     description: getDescription(product, category),
     bandcampAlbumId: musicMeta?.bandcampAlbumId,
