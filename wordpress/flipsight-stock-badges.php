@@ -23,6 +23,13 @@ function flipsight_stock_badges_get_badge($product = null) {
         return null;
     }
 
+    if (flipsight_stock_badges_is_preorder_locked($product)) {
+        return [
+            'text' => __('Pre-order', 'flipsight'),
+            'class' => 'is-pre-order',
+        ];
+    }
+
     $quantity = $product->get_stock_quantity();
     $managing_stock = $product->get_manage_stock();
     $sold_out = !$product->is_in_stock() || $product->get_stock_status() === 'outofstock';
@@ -46,6 +53,14 @@ function flipsight_stock_badges_get_badge($product = null) {
     }
 
     return null;
+}
+
+function flipsight_stock_badges_is_preorder_locked($product) {
+    if (!$product instanceof WC_Product) {
+        return false;
+    }
+
+    return wc_string_to_bool(get_post_meta($product->get_id(), '_flipsight_preorder_locked', true));
 }
 
 function flipsight_stock_badges_render($context = 'loop') {
@@ -80,6 +95,25 @@ add_filter('woocommerce_get_availability', function ($availability, $product) {
     }
 
     return $availability;
+}, 20, 2);
+
+add_filter('woocommerce_is_purchasable', function ($purchasable, $product) {
+    if (flipsight_stock_badges_is_preorder_locked($product)) {
+        return false;
+    }
+
+    return $purchasable;
+}, 20, 2);
+
+add_filter('woocommerce_add_to_cart_validation', function ($passed, $product_id) {
+    $product = wc_get_product($product_id);
+
+    if (flipsight_stock_badges_is_preorder_locked($product)) {
+        wc_add_notice(__('This vinyl is listed for preview, but checkout is not open yet.', 'flipsight'), 'notice');
+        return false;
+    }
+
+    return $passed;
 }, 20, 2);
 
 add_action('wp_head', function () {
@@ -121,6 +155,12 @@ add_action('wp_head', function () {
         .flipsight-stock-badge.is-low-stock,
         .stock.is-low-stock {
             background: #253f7f;
+            color: #ffffff;
+        }
+
+        .flipsight-stock-badge.is-pre-order,
+        .stock.is-pre-order {
+            background: #c4572a;
             color: #ffffff;
         }
     </style>

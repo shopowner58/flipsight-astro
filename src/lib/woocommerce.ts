@@ -41,6 +41,7 @@ interface MusicMeta {
   bandcampAlbumId?: string;
   bandcampUrl?: string;
   gallery?: string[];
+  availabilityLabel?: string;
 }
 
 interface ArtEditionMeta {
@@ -115,7 +116,7 @@ const formatMoney = (rawPrice: string | undefined, product: WooStoreProduct) => 
 };
 
 const getAttributeTerms = (product: WooStoreProduct, attributeName: RegExp) =>
-  product.attributes?.find((attribute) => attributeName.test(attribute.name))?.terms?.map((term) => term.name) ?? [];
+  product.attributes?.find((attribute) => attributeName.test(attribute.name))?.terms?.map((term) => decodeHtml(term.name)) ?? [];
 
 const formatSizeLabel = (value: string) =>
   value.replace(/\s*[x×]\s*/gi, " × ");
@@ -168,6 +169,41 @@ const getCatalog = (product: WooStoreProduct, category: ProductCategory) => {
   return category === "art" ? `FLIPSART-${product.id}` : `WC-${product.id}`;
 };
 
+const getArtist = (product: WooStoreProduct) => {
+  const artists = getAttributeTerms(product, /^artist$/i);
+  return artists.length > 0 ? artists.join(" / ") : undefined;
+};
+
+const getStockStatus = (product: WooStoreProduct, musicMeta?: MusicMeta): Product["stockStatus"] => {
+  const availabilityLabel = musicMeta?.availabilityLabel?.toLowerCase() ?? "";
+
+  if (availabilityLabel.includes("pre-order") || availabilityLabel.includes("preorder")) {
+    return "Pre-order";
+  }
+
+  if (availabilityLabel.includes("sold")) {
+    return "Sold out";
+  }
+
+  if (availabilityLabel.includes("low")) {
+    return "Low stock";
+  }
+
+  if (product.stock_status === "outofstock" || product.is_in_stock === false) {
+    return "Sold out";
+  }
+
+  if (product.stock_status === "onbackorder") {
+    return "Pre-order";
+  }
+
+  if (typeof product.low_stock_remaining === "number") {
+    return "Low stock";
+  }
+
+  return "Available";
+};
+
 const getVariants = (product: WooStoreProduct, artEditionMeta?: Map<number, ArtEditionMeta>) => {
   if (product.type !== "variable") return [];
 
@@ -210,18 +246,17 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta, artEditi
     id: product.id,
     slug: product.slug,
     title: decodeHtml(product.name),
+    artist: getArtist(product),
     catalog: getCatalog(product, category),
     category,
     price: formatPrice(product),
     image,
     gallery: uniqueItems([...wooGallery, ...metaGallery].filter((item) => item !== image)).slice(0, 8),
-    stockStatus:
-      product.stock_status === "outofstock" || product.is_in_stock === false
-        ? "Sold out"
-        : product.stock_status === "onbackorder" || typeof product.low_stock_remaining === "number"
-          ? "Low stock"
-          : "Available",
-    editionInfo: getEditionInfo(product, category),
+    stockStatus: getStockStatus(product, musicMeta),
+    editionInfo:
+      category === "music" && musicMeta?.availabilityLabel?.toLowerCase().includes("pre-order")
+        ? "Limited vinyl"
+        : getEditionInfo(product, category),
     description: getDescription(product, category),
     bandcampAlbumId: musicMeta?.bandcampAlbumId,
     bandcampUrl: musicMeta?.bandcampUrl,
@@ -230,7 +265,7 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta, artEditi
     type,
     variants: getVariants(product, artEditionMeta),
     editionLabel: artEditionMeta?.get(product.id)?.editionLabel,
-    availabilityLabel: artEditionMeta?.get(product.id)?.availabilityLabel,
+    availabilityLabel: musicMeta?.availabilityLabel ?? artEditionMeta?.get(product.id)?.availabilityLabel,
     ...tone,
   };
 };

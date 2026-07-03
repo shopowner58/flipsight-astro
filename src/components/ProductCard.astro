@@ -2,26 +2,33 @@
 import Button from "./Button.astro";
 import type { Product } from "../data/products";
 import { getAddToCartUrl, getCheckoutAddToCartUrl } from "../lib/woocommerce";
-import { getStockBadgeTone, getStockLabel, hasStockBadge } from "../lib/stock";
+import { getStockBadgeTone, getStockLabel, hasStockBadge, isCheckoutDisabled } from "../lib/stock";
 
 type Props = Pick<Product, "id" | "slug" | "title" | "category" | "price" | "image" | "stockStatus" | "editionInfo" | "artist" | "catalog" | "format" | "hue" | "chroma" | "aspect" | "type" | "variants">;
 
 const product = Astro.props as Props;
 const tone = `oklch(0.84 ${product.chroma ?? 0.02} ${product.hue ?? 30})`;
 const aspectClass = product.aspect === "portrait" || product.category !== "music" ? "aspect-[4/5]" : "aspect-square";
+const releasePath = `/product/${product.slug}`;
 const buyHref =
-  product.type === "variable"
+  product.stockStatus === "Pre-order"
+    ? releasePath
+    : product.type === "variable"
     ? `/product/${product.slug}`
     : product.category === "art"
     ? getCheckoutAddToCartUrl(product.id)
     : getAddToCartUrl(product.id, `/${product.category}`);
 const buyLabel =
-  product.type === "variable"
+  product.stockStatus === "Pre-order"
+    ? "Listen"
+    : product.type === "variable"
     ? "Choose size"
     : product.category === "art"
       ? "Buy now"
       : "Add to cart";
 const stockLabel = getStockLabel(product.stockStatus);
+const buyDisabled = isCheckoutDisabled(product.stockStatus) && product.stockStatus !== "Pre-order";
+const buyButtonHref = buyDisabled ? undefined : buyHref;
 ---
 
 <article class="group grid gap-4">
@@ -55,7 +62,7 @@ const stockLabel = getStockLabel(product.stockStatus);
     </div>
     <div class="mt-5 flex gap-3">
       <Button href={`/product/${product.slug}`} variant="secondary">View</Button>
-      <Button href={buyHref} variant="ghost" disabled={product.stockStatus === "Sold out"}>
+      <Button href={buyButtonHref} variant="ghost" disabled={buyDisabled}>
         {buyLabel}
       </Button>
     </div>

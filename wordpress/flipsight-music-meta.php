@@ -39,7 +39,10 @@ add_action('rest_api_init', function () {
                 }
 
                 $meta_gallery = get_post_meta($product->get_id(), '_flipsight_music_gallery', true);
-                if (empty($gallery) && is_array($meta_gallery)) {
+                $append_meta_gallery = wc_string_to_bool(get_post_meta($product->get_id(), '_flipsight_music_gallery_append', true));
+                if ($append_meta_gallery && is_array($meta_gallery)) {
+                    $gallery = array_values(array_unique(array_filter(array_merge($gallery, $meta_gallery))));
+                } elseif (empty($gallery) && is_array($meta_gallery)) {
                     $gallery = array_values(array_filter($meta_gallery));
                 }
 
@@ -50,6 +53,7 @@ add_action('rest_api_init', function () {
                     'bandcampAlbumId' => get_post_meta($product->get_id(), '_flipsight_bandcamp_album_id', true),
                     'bandcampUrl' => get_post_meta($product->get_id(), '_flipsight_bandcamp_url', true),
                     'gallery' => $gallery,
+                    'availabilityLabel' => get_post_meta($product->get_id(), '_flipsight_availability_label', true),
                 ];
             }
 

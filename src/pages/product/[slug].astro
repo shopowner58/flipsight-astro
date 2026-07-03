@@ -4,7 +4,7 @@ import Button from "../../components/Button.astro";
 import ProductGrid from "../../components/ProductGrid.astro";
 import type { Product } from "../../data/products";
 import { getAddToCartUrl, getCheckoutAddToCartUrl, getProductBySlug, getProducts, getVariationCheckoutUrl, SITE_URL } from "../../lib/woocommerce";
-import { getStockBadgeTone, getStockLabel, hasStockBadge } from "../../lib/stock";
+import { getStockBadgeTone, getStockLabel, hasStockBadge, isCheckoutDisabled } from "../../lib/stock";
 
 export const prerender = true;
 
@@ -44,10 +44,14 @@ const bandcampEmbedSrc = product.bandcampAlbumId
   ? `https://bandcamp.com/EmbeddedPlayer/album=${product.bandcampAlbumId}/size=large/bgcol=ffffff/linkcol=333333/artwork=none/transparent=true/`
   : "";
 const checkoutNote =
-  product.category === "art"
+  product.stockStatus === "Pre-order"
+    ? "The vinyl is listed for preview, but physical checkout is not open yet. Listen through Bandcamp now; FLIPSIGHT checkout will open when the pressing is ready."
+    : product.category === "art"
     ? "Secure checkout, live stock control and edition handling are processed through the FLIPSIGHT shop. Every work is confirmed before packing, shipping or pickup."
     : "Secure checkout, live stock control and shipping are processed through the FLIPSIGHT shop. Orders ship from Antwerp when stock is available.";
 const stockLabel = getStockLabel(product.stockStatus);
+const checkoutDisabled = isCheckoutDisabled(product.stockStatus);
+const checkoutHref = checkoutDisabled ? undefined : buyHref;
 ---
 
 <BaseLayout title={`${product.title} - FLIPSIGHT`} canonicalUrl={canonicalUrl}>
@@ -161,8 +165,8 @@ const stockLabel = getStockLabel(product.stockStatus);
             ) : (
               <div class="grid items-center gap-4 sm:grid-cols-[auto_1fr_auto]">
                 <div class="fs-display text-[30px]">{product.price}</div>
-                <Button href={buyHref} variant="primary" disabled={product.stockStatus === "Sold out"}>
-                  {product.stockStatus === "Sold out" ? "Sold out" : "Add to cart"}
+                <Button href={checkoutHref} variant="primary" disabled={checkoutDisabled}>
+                  {product.stockStatus === "Pre-order" ? "Pre-order soon" : product.stockStatus === "Sold out" ? "Sold out" : "Add to cart"}
                 </Button>
                 {product.category === "music" && product.bandcampUrl && (
                   <Button href={product.bandcampUrl} variant="ghost" target="_blank" rel="noreferrer">Bandcamp</Button>
