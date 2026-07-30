@@ -52,6 +52,14 @@ function flipsight_stock_badges_get_badge($product = null) {
         ];
     }
 
+    $availability_label = trim((string) get_post_meta($product->get_id(), '_flipsight_availability_label', true));
+    if (strcasecmp($availability_label, 'New') === 0) {
+        return [
+            'text' => __('New', 'flipsight'),
+            'class' => 'is-new',
+        ];
+    }
+
     return null;
 }
 
@@ -160,6 +168,12 @@ add_action('wp_head', function () {
 
         .flipsight-stock-badge.is-pre-order,
         .stock.is-pre-order {
+            background: #c4572a;
+            color: #ffffff;
+        }
+
+        .flipsight-stock-badge.is-new,
+        .stock.is-new {
             background: #c4572a;
             color: #ffffff;
         }

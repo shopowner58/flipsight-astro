@@ -63,9 +63,9 @@ const checkoutHref = checkoutDisabled ? undefined : buyHref;
     </nav>
 
     <section class="grid items-start gap-[clamp(40px,5vw,96px)] lg:grid-cols-[1.2fr_1fr]">
-      <div class="lg:sticky lg:top-28">
+      <div class="lg:sticky lg:top-28" data-product-gallery>
         <div class={`fs-vinyl-art relative overflow-hidden ${product.aspect === "portrait" ? "aspect-[4/5]" : "aspect-square"}`} style={`--tone: ${tone}`}>
-          {product.image && <img class="h-full w-full object-cover" src={product.image} alt={product.title} />}
+          {product.image && <img data-product-featured-image class="h-full w-full object-cover" src={product.image} alt={product.title} />}
           {hasStockBadge(product.stockStatus) && (
             <span class={`absolute left-4 top-4 z-10 rounded-none px-4 py-3 font-mono text-[11px] uppercase tracking-[0.16em] shadow-sm ${getStockBadgeTone(product.stockStatus)}`}>
               {stockLabel}
@@ -74,10 +74,18 @@ const checkoutHref = checkoutDisabled ? undefined : buyHref;
         </div>
         {galleryImages.length > 1 && (
           <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {galleryImages.slice(1).map((image, index) => (
-              <figure class="group border fs-soft-rule bg-[var(--fs-bg)] p-2">
-                <img class="aspect-square w-full object-cover transition duration-300 group-hover:opacity-80" src={image} alt={`${product.title} detail ${index + 1}`} loading="lazy" />
-              </figure>
+            {galleryImages.map((image, index) => (
+              <button
+                type="button"
+                class="group border fs-soft-rule bg-[var(--fs-bg)] p-2 text-left transition-colors hover:border-[var(--fs-ink)] aria-[current=true]:border-[var(--fs-ink)] aria-[current=true]:bg-[var(--fs-bg-2)]"
+                data-product-gallery-thumb
+                data-image-src={image}
+                data-image-alt={index === 0 ? product.title : `${product.title} detail ${index}`}
+                aria-current={index === 0 ? "true" : "false"}
+                aria-label={`Show ${product.title} image ${index + 1}`}
+              >
+                <img class="aspect-square w-full object-cover transition duration-300 group-hover:opacity-80" src={image} alt={index === 0 ? product.title : `${product.title} detail ${index}`} loading="lazy" />
+              </button>
             ))}
           </div>
         )}
@@ -212,6 +220,29 @@ const checkoutHref = checkoutDisabled ? undefined : buyHref;
         )}
       </div>
     </section>
+
+    <script>
+      document.querySelectorAll("[data-product-gallery]").forEach((gallery) => {
+        const featured = gallery.querySelector("[data-product-featured-image]");
+        const thumbs = Array.from(gallery.querySelectorAll("[data-product-gallery-thumb]"));
+
+        if (!(featured instanceof HTMLImageElement)) return;
+
+        thumbs.forEach((thumb) => {
+          thumb.addEventListener("click", () => {
+            const imageSrc = thumb.getAttribute("data-image-src");
+            const imageAlt = thumb.getAttribute("data-image-alt");
+
+            if (!imageSrc) return;
+
+            featured.src = imageSrc;
+            featured.alt = imageAlt || featured.alt;
+            thumbs.forEach((item) => item.setAttribute("aria-current", "false"));
+            thumb.setAttribute("aria-current", "true");
+          });
+        });
+      });
+    </script>
 
     {related.length > 0 && (
       <section>

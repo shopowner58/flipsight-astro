@@ -175,7 +175,7 @@ const getArtist = (product: WooStoreProduct) => {
 };
 
 const getStockStatus = (product: WooStoreProduct, musicMeta?: MusicMeta): Product["stockStatus"] => {
-  const availabilityLabel = musicMeta?.availabilityLabel?.toLowerCase() ?? "";
+  const availabilityLabel = musicMeta?.availabilityLabel?.toLowerCase().trim() ?? "";
 
   if (availabilityLabel.includes("pre-order") || availabilityLabel.includes("preorder")) {
     return "Pre-order";
@@ -199,6 +199,10 @@ const getStockStatus = (product: WooStoreProduct, musicMeta?: MusicMeta): Produc
 
   if (typeof product.low_stock_remaining === "number") {
     return "Low stock";
+  }
+
+  if (availabilityLabel === "new") {
+    return "New";
   }
 
   return "Available";

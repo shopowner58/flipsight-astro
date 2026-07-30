@@ -10,7 +10,7 @@ export interface Product {
   price: string;
   image: string;
   gallery?: string[];
-  stockStatus: "Available" | "Low stock" | "Sold out" | "Pre-order";
+  stockStatus: "Available" | "Low stock" | "Sold out" | "Pre-order" | "New";
   editionInfo: string;
   description: string;
   bandcampAlbumId?: string;
