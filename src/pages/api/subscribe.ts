@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { isValidEmail, subscribeToAudience } from "../../lib/emailit";
+import { getMerchAudienceSubscribeUrl, isValidEmail, subscribeToAudience } from "../../lib/emailit";
 
 export const prerender = false;
 
@@ -18,6 +18,8 @@ export const POST: APIRoute = async ({ request }) => {
   const body = await readBody(request);
   const email = String(body.email ?? "").trim().toLowerCase();
   const consent = body.consent;
+  const source = String(body.source ?? "").trim().toLowerCase();
+  const isMerchInterest = source === "merch" || source === "merch-interest";
 
   if (!isValidEmail(email)) {
     return Response.json({ ok: false, message: "Use a valid email address." }, { status: 400 });
@@ -28,8 +30,11 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   try {
-    await subscribeToAudience(email);
-    return Response.json({ ok: true, message: "You are on the FLIPSIGHT list." });
+    await subscribeToAudience(email, isMerchInterest ? getMerchAudienceSubscribeUrl() : undefined);
+    return Response.json({
+      ok: true,
+      message: isMerchInterest ? "Noted. You will hear when the next merch run moves." : "You are on the FLIPSIGHT list.",
+    });
   } catch (error) {
     console.error(error);
     return Response.json({ ok: false, message: "Could not subscribe right now. Please try again later." }, { status: 502 });

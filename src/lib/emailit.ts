@@ -8,6 +8,9 @@ export const getAudienceSubscribeUrl = () =>
   getEnv("EMAILIT_AUDIENCE_SUBSCRIBE_URL")?.trim() ??
   "https://api.emailit.com/v1/audiences/subscribe/4b1c929955aef899fddbfa5531af23e4";
 
+export const getMerchAudienceSubscribeUrl = () =>
+  getEnv("EMAILIT_MERCH_AUDIENCE_SUBSCRIBE_URL")?.trim() ?? getAudienceSubscribeUrl();
+
 export const getEmailFrom = () => getEnv("EMAIL_FROM")?.trim() ?? "FLIPSIGHT <studio@flipsight.be>";
 
 export const getEmailReplyTo = () => getEnv("EMAIL_REPLY_TO")?.trim() ?? "studio@flipsight.be";
@@ -22,9 +25,9 @@ export type EmailitSendInput = {
 
 export const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
-export async function subscribeToAudience(email: string) {
+export async function subscribeToAudience(email: string, audienceUrl?: string) {
   const apiKey = getEmailitApiKey();
-  const url = getAudienceSubscribeUrl();
+  const url = audienceUrl?.trim() || getAudienceSubscribeUrl();
 
   if (!apiKey) {
     throw new Error("EMAILIT_API_KEY is not configured.");

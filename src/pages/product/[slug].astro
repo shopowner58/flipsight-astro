@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Button from "../../components/Button.astro";
+import NewsletterForm from "../../components/NewsletterForm.astro";
 import ProductGrid from "../../components/ProductGrid.astro";
 import type { Product } from "../../data/products";
 import { getAddToCartUrl, getCheckoutAddToCartUrl, getProductBySlug, getProducts, getVariationCheckoutUrl, SITE_URL } from "../../lib/woocommerce";
@@ -52,6 +53,7 @@ const checkoutNote =
 const stockLabel = getStockLabel(product.stockStatus);
 const checkoutDisabled = isCheckoutDisabled(product.stockStatus);
 const checkoutHref = checkoutDisabled ? undefined : buyHref;
+const showMerchInterest = product.category === "merch" && product.stockStatus === "Sold out";
 ---
 
 <BaseLayout title={`${product.title} - FLIPSIGHT`} canonicalUrl={canonicalUrl}>
@@ -190,6 +192,35 @@ const checkoutHref = checkoutDisabled ? undefined : buyHref;
             {checkoutNote}
           </p>
         </div>
+
+        {showMerchInterest && (
+          <section class="mt-5 border-y fs-rule bg-[var(--fs-bg-2)] px-5 py-6 sm:px-6">
+            <div class="flex items-start justify-between gap-5 border-b fs-soft-rule pb-4">
+              <div>
+                <div class="fs-meta-muted">Next merch signal</div>
+                <h2 class="fs-display mt-3 text-[clamp(28px,3vw,42px)] leading-[0.98]">
+                  Keep a rail open.
+                </h2>
+              </div>
+              <div class="hidden border border-[var(--fs-line)] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--fs-mute)] sm:block">
+                Small run
+              </div>
+            </div>
+            <p class="mt-5 text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
+              This tee moved out quietly. If the next FLIPSIGHT piece should pass by your inbox before it hits the room, leave a signal here.
+            </p>
+            <div class="mt-6 border-t fs-soft-rule pt-5">
+              <NewsletterForm
+                source="merch"
+                idSuffix={`merch-${product.slug}`}
+                placeholder="your@email.com"
+                buttonLabel="Keep me posted"
+                consentLabel="Tell me when the next FLIPSIGHT merch run is ready."
+                fullWidth
+              />
+            </div>
+          </section>
+        )}
 
         {bandcampEmbedSrc && (
           <section class="mt-8 border-t fs-rule pt-6">

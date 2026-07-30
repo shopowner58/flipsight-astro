@@ -1,25 +1,41 @@
 ---
 type Props = {
   compact?: boolean;
+  source?: string;
+  idSuffix?: string;
+  placeholder?: string;
+  buttonLabel?: string;
+  consentLabel?: string;
+  fullWidth?: boolean;
 };
 
-const { compact = false } = Astro.props;
+const {
+  compact = false,
+  source = "updates",
+  idSuffix = compact ? "compact" : "default",
+  placeholder = "email@domain.com",
+  buttonLabel = "Subscribe",
+  consentLabel = "I want to receive FLIPSIGHT updates.",
+  fullWidth = false,
+} = Astro.props;
+const widthClass = fullWidth ? "w-full" : compact ? "max-w-sm" : "max-w-xl";
 ---
 
 <form
-  class={`fs-emailit-form grid gap-3 ${compact ? "max-w-sm" : "max-w-xl"}`}
+  class={`fs-emailit-form grid gap-3 ${widthClass}`}
   action="/api/subscribe"
   method="post"
   data-emailit-form
 >
+  <input type="hidden" name="source" value={source} />
   <div class="grid gap-2 sm:grid-cols-[1fr_auto]">
-    <label class="sr-only" for={`newsletter-email-${compact ? "compact" : "default"}`}>Email address</label>
+    <label class="sr-only" for={`newsletter-email-${idSuffix}`}>Email address</label>
     <input
-      id={`newsletter-email-${compact ? "compact" : "default"}`}
+      id={`newsletter-email-${idSuffix}`}
       class="min-h-12 border-b border-[var(--fs-line)] bg-transparent px-0 font-mono text-[13px] outline-none placeholder:text-[var(--fs-mute)] focus:border-[var(--fs-accent)]"
       type="email"
       name="email"
-      placeholder="email@domain.com"
+      placeholder={placeholder}
       autocomplete="email"
       required
     />
@@ -27,12 +43,12 @@ const { compact = false } = Astro.props;
       class="min-h-12 border border-[var(--fs-line)] px-5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors hover:border-[var(--fs-accent)] hover:text-[var(--fs-accent)]"
       type="submit"
     >
-      Subscribe
+      {buttonLabel}
     </button>
   </div>
   <label class="flex items-start gap-3 text-[12px] leading-relaxed text-[var(--fs-mute)]">
     <input class="mt-1 h-3.5 w-3.5 accent-[var(--fs-ink)]" type="checkbox" name="consent" required />
-    <span>I want to receive FLIPSIGHT updates.</span>
+    <span>{consentLabel}</span>
   </label>
   <p class="min-h-5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[var(--fs-mute)]" data-emailit-status aria-live="polite"></p>
 </form>
