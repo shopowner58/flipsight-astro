@@ -50,6 +50,7 @@ add_action('rest_api_init', function () {
                     'productId' => $product->get_id(),
                     'slug' => $product->get_slug(),
                     'sku' => $sku,
+                    'artist' => implode(' / ', wc_get_product_terms($product->get_id(), 'pa_artist', ['fields' => 'names'])),
                     'bandcampAlbumId' => get_post_meta($product->get_id(), '_flipsight_bandcamp_album_id', true),
                     'bandcampUrl' => get_post_meta($product->get_id(), '_flipsight_bandcamp_url', true),
                     'gallery' => $gallery,

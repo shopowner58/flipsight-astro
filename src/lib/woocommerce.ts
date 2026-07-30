@@ -38,6 +38,7 @@ interface MusicMeta {
   productId: number;
   slug: string;
   sku?: string;
+  artist?: string;
   bandcampAlbumId?: string;
   bandcampUrl?: string;
   gallery?: string[];
@@ -169,9 +170,37 @@ const getCatalog = (product: WooStoreProduct, category: ProductCategory) => {
   return category === "art" ? `FLIPSART-${product.id}` : `WC-${product.id}`;
 };
 
-const getArtist = (product: WooStoreProduct) => {
+const normalizeName = (value = "") =>
+  decodeHtml(value).toLowerCase().replace(/\s+/g, " ").trim();
+
+const splitMusicProductName = (name: string) => {
+  const separator = " - ";
+  const separatorIndex = name.indexOf(separator);
+  const firstParenIndex = name.indexOf("(");
+
+  if (separatorIndex < 1 || (firstParenIndex >= 0 && separatorIndex > firstParenIndex)) {
+    return { title: name };
+  }
+
+  const artist = name.slice(0, separatorIndex).trim();
+  const title = name.slice(separatorIndex + separator.length).trim();
+  const titleLooksLikeRelease = /\b(ep|album|single|lp|white label|vinyl)\b|\(/i.test(title);
+
+  if (!artist || !title || !titleLooksLikeRelease) {
+    return { title: name };
+  }
+
+  return { artist, title };
+};
+
+const getArtist = (product: WooStoreProduct, musicMeta?: MusicMeta, splitName?: ReturnType<typeof splitMusicProductName>) => {
   const artists = getAttributeTerms(product, /^artist$/i);
-  return artists.length > 0 ? artists.join(" / ") : undefined;
+  if (artists.length > 0) return artists.join(" / ");
+
+  const musicMetaArtist = decodeHtml(musicMeta?.artist);
+  if (musicMetaArtist) return musicMetaArtist;
+
+  return splitName?.artist;
 };
 
 const getStockStatus = (product: WooStoreProduct, musicMeta?: MusicMeta): Product["stockStatus"] => {
@@ -242,6 +271,13 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta, artEditi
   const category = getCategoryFromWooProduct(product);
   const tone = categoryTone[category];
   const type = product.type === "variable" ? "variable" : "simple";
+  const decodedName = decodeHtml(product.name);
+  const splitName = category === "music" ? splitMusicProductName(decodedName) : { title: decodedName };
+  const artist = getArtist(product, musicMeta, splitName);
+  const title =
+    artist && splitName.artist && normalizeName(artist) === normalizeName(splitName.artist)
+      ? splitName.title
+      : decodedName;
   const image = product.images?.[0]?.src ?? product.images?.[0]?.thumbnail ?? "";
   const wooGallery = product.images?.slice(1).map((item) => item.src || item.thumbnail || "") ?? [];
   const metaGallery = musicMeta?.gallery ?? [];
@@ -249,8 +285,8 @@ const mapWooProduct = (product: WooStoreProduct, musicMeta?: MusicMeta, artEditi
   return {
     id: product.id,
     slug: product.slug,
-    title: decodeHtml(product.name),
-    artist: getArtist(product),
+    title,
+    artist,
     catalog: getCatalog(product, category),
     category,
     price: formatPrice(product),
