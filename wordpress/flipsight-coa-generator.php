@@ -216,6 +216,10 @@ function flipsight_coa_get_size(WC_Order_Item_Product $item, ?WC_Product $produc
     return $size ? $size . ' cm' : '';
 }
 
+function flipsight_coa_get_manual_sold_quantity(?WC_Product $product): int {
+    return $product ? max(0, (int) $product->get_meta('_flipsight_manual_sold_quantity', true)) : 0;
+}
+
 function flipsight_coa_size_key(string $size): string {
     return strtolower(preg_replace('/[^0-9x]/', '', str_replace(['X', '×'], 'x', $size)));
 }
@@ -223,8 +227,9 @@ function flipsight_coa_size_key(string $size): string {
 function flipsight_coa_get_edition_data(WC_Order $order, WC_Order_Item_Product $item, ?WC_Product $product, ?WC_Product $source, string $size): array {
     $product_id = $product ? $product->get_id() : 0;
     $variation_id = $product && $product->is_type('variation') ? $product->get_id() : 0;
-    $sold_until_order = flipsight_coa_count_sold($product_id, $variation_id, $order->get_id());
-    $sold_total = flipsight_coa_count_sold($product_id, $variation_id);
+    $manual_sold_quantity = flipsight_coa_get_manual_sold_quantity($product);
+    $sold_until_order = flipsight_coa_count_sold($product_id, $variation_id, $order->get_id()) + $manual_sold_quantity;
+    $sold_total = flipsight_coa_count_sold($product_id, $variation_id) + $manual_sold_quantity;
     $stock = $product && $product->managing_stock() ? (int) $product->get_stock_quantity() : null;
     $total = $stock !== null ? $stock + $sold_total : 0;
 
