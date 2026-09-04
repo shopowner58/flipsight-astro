@@ -1,31 +1,47 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ArtIntro from "../components/ArtIntro.astro";
 import ProductGrid from "../components/ProductGrid.astro";
-import { sortArtOldestFirst } from "../lib/art-display";
+import { getArtPreviewDetails, sortArtOldestFirst } from "../lib/art-display";
 import { getProductsByCategory } from "../lib/woocommerce";
 
 const artProducts = sortArtOldestFirst(await getProductsByCategory("art"));
+const collectionMediums = [...new Set(artProducts.map((product) => getArtPreviewDetails(product).medium).filter(Boolean))];
 ---
 
-<BaseLayout title="Art - FLIPSIGHT">
-  <div class="fs-page fs-page-stack">
-    <section class="grid items-end gap-8 md:grid-cols-[6fr_5fr]">
-      <div>
-        <div class="fs-meta">02 - Art</div>
-        <h1 class="fs-display mt-4 max-w-3xl text-[clamp(38px,5vw,78px)] leading-[0.94]">
-          THE RECORD ENDS.<br />THE IMAGE REMAINS.
-        </h1>
-      </div>
-      <div class="grid gap-6">
-        <p class="max-w-md text-[15px] leading-relaxed text-[var(--fs-ink-2)]">
-          Limited editions, canvases, prints and objects made in and around FLIPSIGHT releases. Each work is numbered, signed, and documented.
-        </p>
-        <div class="flex justify-between border-t fs-soft-rule pt-3">
-          <span class="fs-meta">{artProducts.length} works</span>
-          <span class="fs-meta-muted">FLIPSART editions</span>
+<BaseLayout
+  title="Art - FLIPSIGHT"
+  description="From record sleeves, posters and visual experiments to works with a life of their own. Discover The Future in Reverse, the FLIPSART canvas collection."
+>
+  <div class="fs-page art-page">
+    <ArtIntro worksCount={artProducts.length} />
+    <section id="art-works" class="art-collection" aria-labelledby="art-works-title">
+      <div class="collection-heading">
+        <div>
+          <p class="fs-meta-muted">The collection</p>
+          <p class="collection-series">The Future in Reverse</p>
+          <h2 id="art-works-title" class="fs-display mt-3 text-[clamp(28px,3vw,42px)]">The works.</h2>
+          {collectionMediums.length > 0 && <p class="collection-medium">{collectionMediums.join(" ")}</p>}
+        </div>
+        <div class="text-right">
+          <p class="fs-meta">{artProducts.length} works / Limited editions</p>
+          <p class="fs-meta-muted mt-2 text-[9px]">Signed, numbered, documented</p>
         </div>
       </div>
+      <ProductGrid products={artProducts} category="art" artGallery />
     </section>
-    <ProductGrid products={artProducts} category="art" />
   </div>
 </BaseLayout>
+
+<style>
+  .art-page { padding-top: clamp(34px, 4vw, 64px); }
+  .art-collection { margin-top: clamp(48px, 6vw, 90px); scroll-margin-top: 110px; }
+  .collection-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding-bottom: 24px; margin-bottom: 32px; border-bottom: 1px solid var(--fs-line-soft); }
+  .collection-series { margin-top: 12px; font-family: "Instrument Serif", Georgia, serif; font-size: clamp(26px, 2.5vw, 36px); font-style: italic; line-height: 1.15; }
+  .collection-medium { max-width: 500px; margin-top: 16px; color: var(--fs-ink-2); font-size: 14px; line-height: 1.65; text-wrap: pretty; }
+  @media (max-width: 480px) {
+    .collection-heading { flex-wrap: wrap; gap: 20px; }
+    .collection-heading .text-right { width: 100%; text-align: left; }
+    .collection-heading .text-right > .fs-meta { font-size: 9px; }
+  }
+</style>

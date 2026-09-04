@@ -5,9 +5,12 @@ import { getArtPreviewDetails } from "../lib/art-display";
 import { getAddToCartUrl, getCheckoutAddToCartUrl } from "../lib/woocommerce";
 import { getStockBadgeTone, getStockLabel, hasStockBadge, isCheckoutDisabled } from "../lib/stock";
 
-type Props = Pick<Product, "id" | "slug" | "title" | "category" | "price" | "image" | "stockStatus" | "editionInfo" | "artist" | "catalog" | "format" | "year" | "hue" | "chroma" | "aspect" | "type" | "variants">;
+type Props = Pick<Product, "id" | "slug" | "title" | "category" | "price" | "image" | "stockStatus" | "editionInfo" | "artist" | "catalog" | "format" | "year" | "hue" | "chroma" | "aspect" | "type" | "variants"> & {
+  artGallery?: boolean;
+};
 
 const product = Astro.props as Props;
+const isArtGallery = product.category === "art" && product.artGallery === true;
 const tone = `oklch(0.84 ${product.chroma ?? 0.02} ${product.hue ?? 30})`;
 const aspectClass = product.aspect === "portrait" || product.category !== "music" ? "aspect-[4/5]" : "aspect-square";
 const releasePath = `/product/${product.slug}`;
@@ -33,24 +36,28 @@ const buyButtonHref = buyDisabled ? undefined : buyHref;
 const artPreview = product.category === "art" ? getArtPreviewDetails(product) : null;
 ---
 
-<article class="group grid gap-4">
-  <a href={`/product/${product.slug}`} class={`fs-vinyl-art relative block overflow-hidden ${aspectClass}`} style={`--tone: ${tone}`}>
+<article class:list={["group grid", isArtGallery ? "art-gallery-card content-start gap-6" : "gap-4"]}>
+  <a href={`/product/${product.slug}`} aria-label={product.category === "art" ? `View ${product.title}` : undefined} class={`fs-vinyl-art relative block overflow-hidden ${aspectClass}`} style={`--tone: ${tone}`}>
     {product.image && <img class="absolute inset-0 h-full w-full object-cover" src={product.image} alt={product.title} />}
-    {hasStockBadge(product.stockStatus) && (
+    {!isArtGallery && hasStockBadge(product.stockStatus) && (
       <span class={`absolute left-3 top-3 z-10 rounded-none px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] shadow-sm ${getStockBadgeTone(product.stockStatus)}`}>
         {stockLabel}
       </span>
     )}
-    <div class="absolute inset-x-0 bottom-0 flex justify-between p-4 font-mono text-[10px] uppercase tracking-[0.1em] text-[rgba(17,17,16,0.68)] mix-blend-multiply">
-      <span>{product.category} / {product.catalog}</span>
-      <span>{product.image ? "" : "FLIPSIGHT"}</span>
-    </div>
+    {product.category !== "art" && (
+      <div class="absolute inset-x-0 bottom-0 flex justify-between p-4 font-mono text-[10px] uppercase tracking-[0.1em] text-[rgba(17,17,16,0.68)] mix-blend-multiply">
+        <span>{product.category} / {product.catalog}</span>
+        <span>{product.image ? "" : "FLIPSIGHT"}</span>
+      </div>
+    )}
   </a>
 
-  <div class="border-t fs-soft-rule pt-3">
+  <div class:list={[isArtGallery ? "art-gallery-details" : "border-t fs-soft-rule pt-3"]}>
     <div class="mb-2 flex justify-between gap-4">
       <span class="fs-meta-muted">{product.catalog}</span>
-      <span class={`fs-meta-muted text-right ${product.stockStatus === "Sold out" ? "text-[var(--fs-ink)]" : ""}`}>{stockLabel}</span>
+      {(!isArtGallery || stockLabel !== "Available") && (
+        <span class={`fs-meta-muted text-right ${product.stockStatus === "Sold out" ? "text-[var(--fs-ink)]" : ""}`}>{stockLabel}</span>
+      )}
     </div>
     <a href={`/product/${product.slug}`} class="fs-card-hover block">
       <h3 class="fs-display text-[17px] leading-tight">
@@ -61,7 +68,7 @@ const artPreview = product.category === "art" ? getArtPreviewDetails(product) : 
     {artPreview ? (
       <div class="mt-3 grid gap-1 font-mono text-[11px] tracking-[0.06em] text-[var(--fs-mute)]">
         {artPreview.sizes && <span>{artPreview.sizes}</span>}
-        <span>{artPreview.medium}</span>
+        {!isArtGallery && <span>{artPreview.medium}</span>}
       </div>
     ) : (
       <div class="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px] tracking-[0.06em] text-[var(--fs-mute)]">
@@ -70,11 +77,44 @@ const artPreview = product.category === "art" ? getArtPreviewDetails(product) : 
         <span>{product.price}</span>
       </div>
     )}
-    <div class="mt-5 flex gap-3">
-      <Button href={`/product/${product.slug}`} variant="secondary">View</Button>
-      <Button href={buyButtonHref} variant="ghost" disabled={buyDisabled}>
-        {buyLabel}
-      </Button>
-    </div>
+    {isArtGallery ? (
+      <a class="art-view-link" href={releasePath} aria-label={`View artwork: ${product.title}`}>
+        <span>View artwork</span>
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M3 10h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" />
+        </svg>
+      </a>
+    ) : (
+      <div class="mt-5 flex gap-3">
+        <Button href={`/product/${product.slug}`} variant="secondary">View</Button>
+        <Button href={buyButtonHref} variant="ghost" disabled={buyDisabled}>
+          {buyLabel}
+        </Button>
+      </div>
+    )}
   </div>
 </article>
+
+<style>
+  .art-gallery-card h3 { line-height: 1.25; }
+  .art-view-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 44px;
+    margin-top: 18px;
+    padding-block: 10px;
+    border-bottom: 1px solid var(--fs-ink);
+    font-family: var(--fs-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 180ms ease, border-color 180ms ease;
+  }
+  .art-view-link svg { flex-shrink: 0; }
+  .art-view-link:hover { color: var(--fs-accent); border-color: var(--fs-accent); }
+  .art-gallery-card a:focus-visible { outline: 2px solid var(--fs-accent); outline-offset: 6px; }
+  @media (prefers-reduced-motion: reduce) {
+    .art-view-link { transition: none; }
+  }
+</style>

@@ -1,0 +1,299 @@
+---
+interface Props {
+  worksCount: number;
+}
+
+const { worksCount } = Astro.props;
+// Editorial adaptation of the user-provided FLIPSART booklet.
+---
+
+<section class="art-intro" aria-labelledby="art-series-title">
+  <div class="intro-topline fs-meta">
+    <span>02 / Art</span>
+    <span class="text-[var(--fs-mute)]">The FLIPSART archive</span>
+  </div>
+
+  <div class="intro-layout">
+    <div class="intro-copy">
+      <p class="fs-meta-muted">From the world around the records</p>
+      <h1 id="art-series-title" class="series-title">
+        <span>The record ends.</span>
+        <span>The image remains.</span>
+      </h1>
+
+      <p class="intro-lead">The record was only the beginning.</p>
+      <p class="intro-description">
+        FLIPSART grew out of FLIPSIGHT’s sleeves, posters and visual experiments.
+        Images made around house music, taken beyond their first purpose
+        and given a life of their own on canvas.
+      </p>
+
+      <p class="intro-signals font-mono" aria-label="The origins of the series">
+        <span>Sleeves</span><span aria-hidden="true">/</span>
+        <span>Posters</span><span aria-hidden="true">/</span>
+        <span>Side works</span>
+      </p>
+
+      <div class="intro-actions">
+        <a class="intro-action-link works-link" href="#art-works">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M10 3v14m-6-6 6 6 6-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" />
+          </svg>
+          <span>Explore the {worksCount} works</span>
+        </a>
+        <div>
+          <a
+            class="intro-action-link booklet-link"
+            href="https://www.fldr.be/flagrant/preview-booklet-flipsart"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-describedby="booklet-link-meta"
+          >
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M8 3h9v9M17 3 3 17" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" />
+            </svg>
+            <span>View PDF booklet</span>
+          </a>
+          <p id="booklet-link-meta" class="booklet-meta">Opens in a new tab</p>
+        </div>
+      </div>
+    </div>
+
+    <figure class="intro-figure">
+      <div class="archive-image">
+        <img
+          src="/media/art/flipsart-origin-zigzag-2024.jpg"
+          alt="A FLIPSIGHT Cafe poster on the glass door of Zigzag Records, alongside record sleeves and a synthesizer artwork in the window."
+          width="1122"
+          height="1402"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <figcaption>
+        <span class="caption-index" aria-hidden="true">↳</span>
+        <span>FLIPSIGHT Cafe poster<br /><span class="text-[var(--fs-mute)]">15 June 2024</span></span>
+        <span class="caption-archive">From the archive</span>
+      </figcaption>
+    </figure>
+  </div>
+
+  <details class="art-story" open>
+    <summary>
+      <span class="story-summary-label">
+        <span class="fs-meta-muted">Behind the images</span>
+        <span class="story-invitation">How a sleeve becomes a world of its own.</span>
+      </span>
+      <span class="story-toggle">
+        <span class="story-label-closed">Read the story</span>
+        <span class="story-label-open">Close the story</span>
+        <svg class="story-toggle-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M3 10h14M10 3v14" stroke="currentColor" stroke-width="1.2" />
+        </svg>
+      </span>
+    </summary>
+
+    <div class="story-content">
+      <div class="story-chapters">
+        <section aria-labelledby="art-story-origin">
+          <p class="fs-meta-muted">01 / Origin</p>
+          <h2 id="art-story-origin">Made around music.</h2>
+          <p>
+            FLIPSIGHT is an independent Antwerp label built around house music,
+            visual identity and vinyl culture. From the start, every release
+            needed its own image, atmosphere and physical presence.
+          </p>
+          <p>
+            Some FLIPSART works began as sleeves, posters or event visuals.
+            Others emerged as side works during the visual exploration around
+            a release. Taken out of that first context, the image could become
+            an artwork in its own right.
+          </p>
+        </section>
+
+        <section aria-labelledby="art-story-tension">
+          <p class="fs-meta-muted">02 / A different sense of time</p>
+          <h2 id="art-story-tension">Future sound. Another time.</h2>
+          <p>
+            Synthesizers, turntables and studio equipment inhabit interiors
+            and landscapes that feel slower, older and more painterly than
+            the electronic music they refer to.
+          </p>
+          <p>
+            That tension is The Future in Reverse: future-facing music culture
+            pulled back into images that feel nostalgic, domestic or almost
+            classical. The world of the club and the machine, seen through
+            a different lens.
+          </p>
+        </section>
+
+        <section aria-labelledby="art-story-process">
+          <p class="fs-meta-muted">03 / From image to object</p>
+          <h2 id="art-story-process">A new life on canvas.</h2>
+          <p>
+            Each work is built through concept, art direction and extensive
+            manual refinement, with technology as a starting point.
+            The image is not simply generated. It is built.
+          </p>
+          <p>
+            More than enlarged covers, FLIPSART is a visual archive of
+            FLIPSIGHT’s first three years: sleeves, posters, studies and
+            side works given a new form as physical canvas pieces.
+          </p>
+        </section>
+      </div>
+
+      <blockquote>
+        “The images still carry the atmosphere of the music,<br class="hidden md:block" />
+        but they no longer need the music to exist.”
+      </blockquote>
+      <p class="story-credit fs-meta-muted">From the FLIPSART booklet / The Future in Reverse</p>
+    </div>
+  </details>
+</section>
+
+<style>
+  .intro-topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--fs-line-soft);
+  }
+
+  .intro-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+    gap: clamp(36px, 7vw, 112px);
+    padding-block: clamp(36px, 4vw, 64px);
+  }
+
+  .intro-copy { padding-block: 12px; }
+  .series-title {
+    margin-top: 26px;
+    font-family: var(--fs-display);
+    font-size: clamp(40px, 4.5vw, 72px);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+  .series-title > span { display: block; text-wrap: balance; }
+  .intro-lead {
+    margin-top: 30px;
+    font-size: clamp(18px, 1.55vw, 24px);
+    font-weight: 500;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+  .intro-description {
+    max-width: 460px;
+    margin-top: 14px;
+    color: var(--fs-ink-2);
+    font-size: 15px;
+    line-height: 1.75;
+    text-wrap: pretty;
+  }
+  .intro-signals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+    color: var(--fs-mute);
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  .intro-actions {
+    display: grid;
+    width: max-content;
+    max-width: 100%;
+    gap: 8px;
+    margin-top: 32px;
+  }
+  .intro-action-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding-block: 10px;
+    border-bottom: 1px solid var(--fs-ink);
+    font-family: var(--fs-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 180ms ease, border-color 180ms ease;
+  }
+  .intro-action-link:hover { color: var(--fs-accent); border-color: var(--fs-accent); }
+  .intro-action-link svg { flex-shrink: 0; }
+  .booklet-meta { margin-top: 8px; padding-left: 30px; color: var(--fs-mute); font-family: var(--fs-mono); font-size: 9px; letter-spacing: 0.04em; }
+  .intro-action-link:focus-visible, summary:focus-visible { outline: 2px solid var(--fs-accent); outline-offset: 6px; }
+
+  .intro-figure { width: 100%; max-width: 390px; justify-self: end; }
+  .archive-image { background: var(--fs-bg-2); }
+  .archive-image img { display: block; width: 100%; height: auto; }
+  figcaption {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 14px;
+    font-family: var(--fs-mono);
+    font-size: 9px;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+  .caption-index { font-size: 15px; }
+  .caption-archive { margin-left: auto; color: var(--fs-mute); font-size: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .art-story { border-block: 1px solid var(--fs-line); }
+  summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 24px; cursor: pointer; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  .story-summary-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px 28px; }
+  .story-invitation { font-size: 16px; }
+  .story-toggle { display: flex; flex-shrink: 0; align-items: center; gap: 20px; font-family: var(--fs-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
+  summary:hover .story-toggle { color: var(--fs-accent); }
+  .story-label-open { display: none; }
+  details[open] .story-label-closed { display: none; }
+  details[open] .story-label-open { display: inline; }
+  .story-toggle-icon { transition: transform 180ms ease; }
+  details[open] .story-toggle-icon { transform: rotate(45deg); }
+  .story-content { border-top: 1px solid var(--fs-line-soft); padding-block: 40px; }
+  .story-chapters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 64px); }
+  .story-chapters h2 { margin: 16px 0; font-size: 23px; font-weight: 500; line-height: 1.2; letter-spacing: -0.025em; text-wrap: balance; }
+  .story-chapters h2 ~ p { margin-top: 14px; color: var(--fs-ink-2); font-size: 14px; line-height: 1.8; }
+  blockquote { margin-top: 44px; padding-top: 34px; border-top: 1px solid var(--fs-line-soft); font-family: "Instrument Serif", Georgia, serif; font-size: clamp(28px, 3.3vw, 48px); line-height: 1.16; text-wrap: balance; }
+  .story-credit { margin-top: 20px; font-size: 9px; }
+
+  @media (max-width: 900px) {
+    .intro-layout { gap: 36px; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+    .series-title { font-size: clamp(34px, 4.3vw, 40px); }
+    .caption-archive { display: none; }
+    .story-summary-label { display: grid; gap: 8px; }
+    .story-chapters { grid-template-columns: 1fr; gap: 28px; }
+    .story-chapters section { max-width: 680px; }
+    .story-chapters section + section { border-top: 1px solid var(--fs-line-soft); padding-top: 28px; }
+  }
+  @media (max-width: 640px) {
+    .intro-topline { font-size: 9px; }
+    .intro-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-block: 30px; }
+    .intro-copy { padding: 0; }
+    .intro-copy > .fs-meta-muted { font-size: 9px; }
+    .series-title { margin-top: 22px; font-size: clamp(40px, 9.8vw, 62px); }
+    .intro-lead { margin-top: 22px; }
+    .intro-description { font-size: 14px; line-height: 1.7; }
+    .intro-signals { margin-top: 20px; }
+    .intro-actions { margin-top: 18px; }
+    .intro-figure { max-width: none; }
+    .archive-image img { max-height: 420px; object-fit: cover; object-position: center 57%; }
+    .caption-archive { display: block; }
+    summary { gap: 16px; padding-block: 22px; align-items: flex-start; }
+    .story-invitation { max-width: 225px; font-size: 15px; }
+    .story-toggle { gap: 10px; font-size: 9px; }
+    .story-toggle-icon { margin-top: 3px; }
+    .story-content { padding-block: 30px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .story-toggle-icon, .intro-action-link { transition: none; }
+  }
+</style>
