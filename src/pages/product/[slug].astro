@@ -4,6 +4,7 @@ import Button from "../../components/Button.astro";
 import NewsletterForm from "../../components/NewsletterForm.astro";
 import ProductGrid from "../../components/ProductGrid.astro";
 import type { Product } from "../../data/products";
+import { getArtEditionDetails } from "../../lib/art-display";
 import { getAddToCartUrl, getCheckoutAddToCartUrl, getProductBySlug, getProducts, getVariationCheckoutUrl, SITE_URL } from "../../lib/woocommerce";
 import { getStockBadgeTone, getStockLabel, hasStockBadge, isCheckoutDisabled } from "../../lib/stock";
 
@@ -40,6 +41,7 @@ const canonicalUrl = `${SITE_URL}/product/${product.slug}`;
 const variants = product.variants ?? [];
 const galleryImages = [product.image, ...(product.gallery ?? [])].filter(Boolean).slice(0, 9);
 const productMedium = product.category === "art" ? product.format?.split("·")[0]?.trim() : product.format;
+const artEdition = product.category === "art" ? getArtEditionDetails(product.editionInfo) : null;
 const simpleArtFormat = product.format?.split("·").pop()?.trim() ?? product.format ?? "Artwork";
 const bandcampEmbedSrc = product.bandcampAlbumId
   ? `https://bandcamp.com/EmbeddedPlayer/album=${product.bandcampAlbumId}/size=large/bgcol=ffffff/linkcol=333333/artwork=none/transparent=true/`
@@ -110,7 +112,14 @@ const showMerchInterest = product.category === "merch" && product.stockStatus ==
           </div>
           <div class="grid grid-cols-[140px_1fr] gap-5 border-b fs-soft-rule py-4">
             <dt class="fs-meta-muted">Edition</dt>
-            <dd>{product.editionInfo}</dd>
+            <dd>
+              {artEdition ? (
+                <>
+                  <span class="block">{artEdition.summary}</span>
+                  {artEdition.breakdown && <span class="mt-1 block">{artEdition.breakdown}</span>}
+                </>
+              ) : product.editionInfo}
+            </dd>
           </div>
           <div class="grid grid-cols-[140px_1fr] gap-5 border-b fs-soft-rule py-4">
             <dt class="fs-meta-muted">Year</dt>
@@ -140,7 +149,7 @@ const showMerchInterest = product.category === "merch" && product.stockStatus ==
                 >
                   <span class="grid gap-1">
                     <span class="font-medium uppercase tracking-[0.03em]">{variant.label}</span>
-                    {variant.editionLabel && (
+                    {product.category !== "art" && variant.editionLabel && (
                       <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--fs-mute)]">{variant.editionLabel} next available</span>
                     )}
                   </span>
@@ -162,9 +171,6 @@ const showMerchInterest = product.category === "merch" && product.stockStatus ==
                 >
                   <span class="grid gap-1">
                     <span class="font-medium uppercase tracking-[0.03em]">{simpleArtFormat}</span>
-                    {product.editionLabel && (
-                      <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--fs-mute)]">{product.editionLabel} next available</span>
-                    )}
                   </span>
                   <span class="font-mono text-[12px] tracking-[0.08em]">{product.price}</span>
                   <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--fs-accent)]">

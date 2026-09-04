@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProductGrid from "../components/ProductGrid.astro";
+import { sortArtOldestFirst } from "../lib/art-display";
 import { getProductsByCategory } from "../lib/woocommerce";
 
-const artProducts = await getProductsByCategory("art");
+const artProducts = sortArtOldestFirst(await getProductsByCategory("art"));
 ---
 
 <BaseLayout title="Art - FLIPSIGHT">

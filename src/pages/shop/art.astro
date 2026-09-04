@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProductGrid from "../../components/ProductGrid.astro";
+import { sortArtOldestFirst } from "../../lib/art-display";
 import { getProductsByCategory, SITE_URL } from "../../lib/woocommerce";
 
-const products = await getProductsByCategory("art");
+const products = sortArtOldestFirst(await getProductsByCategory("art"));
 ---
 
 <BaseLayout title="Shop Art - FLIPSIGHT" canonicalUrl={`${SITE_URL}/shop/art`}>

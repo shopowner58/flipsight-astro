@@ -148,7 +148,7 @@ const getEditionInfo = (product: WooStoreProduct, category: ProductCategory) => 
 
   const description = decodeHtml(product.description);
   return (
-    description.match(/Edition of 12.*?(?=\s+Certificate\s+|\s+Series\s+|\s+Publisher\s+|\s+Each work|$)/i)?.[0]?.trim() ??
+    description.match(/Edition of \d+.*?(?=\s+Certificate\s+|\s+Series\s+|\s+Publisher\s+|\s+Each work|$)/i)?.[0]?.trim() ??
     "FLIPSART edition"
   );
 };

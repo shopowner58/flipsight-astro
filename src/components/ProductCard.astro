@@ -1,10 +1,11 @@
 ---
 import Button from "./Button.astro";
 import type { Product } from "../data/products";
+import { getArtPreviewDetails } from "../lib/art-display";
 import { getAddToCartUrl, getCheckoutAddToCartUrl } from "../lib/woocommerce";
 import { getStockBadgeTone, getStockLabel, hasStockBadge, isCheckoutDisabled } from "../lib/stock";
 
-type Props = Pick<Product, "id" | "slug" | "title" | "category" | "price" | "image" | "stockStatus" | "editionInfo" | "artist" | "catalog" | "format" | "hue" | "chroma" | "aspect" | "type" | "variants">;
+type Props = Pick<Product, "id" | "slug" | "title" | "category" | "price" | "image" | "stockStatus" | "editionInfo" | "artist" | "catalog" | "format" | "year" | "hue" | "chroma" | "aspect" | "type" | "variants">;
 
 const product = Astro.props as Props;
 const tone = `oklch(0.84 ${product.chroma ?? 0.02} ${product.hue ?? 30})`;
@@ -29,6 +30,7 @@ const buyLabel =
 const stockLabel = getStockLabel(product.stockStatus);
 const buyDisabled = isCheckoutDisabled(product.stockStatus) && product.stockStatus !== "Pre-order";
 const buyButtonHref = buyDisabled ? undefined : buyHref;
+const artPreview = product.category === "art" ? getArtPreviewDetails(product) : null;
 ---
 
 <article class="group grid gap-4">
@@ -53,13 +55,21 @@ const buyButtonHref = buyDisabled ? undefined : buyHref;
     <a href={`/product/${product.slug}`} class="fs-card-hover block">
       <h3 class="fs-display text-[17px] leading-tight">
         {product.artist ? <>{product.artist} <span class="text-[var(--fs-mute)]">/</span> <em>{product.title}</em></> : product.title}
+        {artPreview && product.year && <> <span class="whitespace-nowrap font-normal">({product.year})</span></>}
       </h3>
     </a>
-    <div class="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px] tracking-[0.06em] text-[var(--fs-mute)]">
-      <span>{product.format ?? product.category}</span>
-      <span>{product.editionInfo}</span>
-      <span>{product.price}</span>
-    </div>
+    {artPreview ? (
+      <div class="mt-3 grid gap-1 font-mono text-[11px] tracking-[0.06em] text-[var(--fs-mute)]">
+        {artPreview.sizes && <span>{artPreview.sizes}</span>}
+        <span>{artPreview.medium}</span>
+      </div>
+    ) : (
+      <div class="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px] tracking-[0.06em] text-[var(--fs-mute)]">
+        <span>{product.format ?? product.category}</span>
+        <span>{product.editionInfo}</span>
+        <span>{product.price}</span>
+      </div>
+    )}
     <div class="mt-5 flex gap-3">
       <Button href={`/product/${product.slug}`} variant="secondary">View</Button>
       <Button href={buyButtonHref} variant="ghost" disabled={buyDisabled}>
